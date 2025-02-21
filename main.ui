@@ -2065,13 +2065,13 @@ background-color:#1159A8;
                                <property name="minimumSize">
                                 <size>
                                  <width>0</width>
-                                 <height>0</height>
+                                 <height>150</height>
                                 </size>
                                </property>
                                <property name="maximumSize">
                                 <size>
                                  <width>16777215</width>
-                                 <height>150</height>
+                                 <height>16777215</height>
                                 </size>
                                </property>
                                <property name="frameShape">
@@ -2099,7 +2099,7 @@ background-color:#1159A8;
                                   <property name="sizePolicy">
                                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                                     <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
+                                    <verstretch>136</verstretch>
                                    </sizepolicy>
                                   </property>
                                   <property name="frameShape">
@@ -2123,50 +2123,6 @@ background-color:#1159A8;
                                      <property name="text">
                                       <string>SKUs : </string>
                                      </property>
-                                    </widget>
-                                   </item>
-                                   <item row="0" column="1">
-                                    <widget class="QComboBox" name="comboBox_14">
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="autoFillBackground">
-                                      <bool>false</bool>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);</string>
-                                     </property>
-                                     <property name="iconSize">
-                                      <size>
-                                       <width>16</width>
-                                       <height>16</height>
-                                      </size>
-                                     </property>
-                                     <property name="frame">
-                                      <bool>true</bool>
-                                     </property>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 1</string>
-                                      </property>
-                                     </item>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 2</string>
-                                      </property>
-                                     </item>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 3</string>
-                                      </property>
-                                     </item>
                                     </widget>
                                    </item>
                                    <item row="1" column="0">
@@ -2265,6 +2221,50 @@ color: rgb(255, 255, 255);</string>
                                      </property>
                                     </widget>
                                    </item>
+                                   <item row="0" column="1">
+                                    <widget class="QComboBox" name="comboBox_14">
+                                     <property name="font">
+                                      <font>
+                                       <family>Calibri</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="autoFillBackground">
+                                      <bool>false</bool>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
+                                     </property>
+                                     <property name="iconSize">
+                                      <size>
+                                       <width>16</width>
+                                       <height>16</height>
+                                      </size>
+                                     </property>
+                                     <property name="frame">
+                                      <bool>true</bool>
+                                     </property>
+                                     <item>
+                                      <property name="text">
+                                       <string>Test 1</string>
+                                      </property>
+                                     </item>
+                                     <item>
+                                      <property name="text">
+                                       <string>Test 2</string>
+                                      </property>
+                                     </item>
+                                     <item>
+                                      <property name="text">
+                                       <string>Test 3</string>
+                                      </property>
+                                     </item>
+                                    </widget>
+                                   </item>
                                   </layout>
                                  </widget>
                                 </item>
@@ -2273,7 +2273,7 @@ color: rgb(255, 255, 255);</string>
                                   <property name="sizePolicy">
                                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                                     <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
+                                    <verstretch>136</verstretch>
                                    </sizepolicy>
                                   </property>
                                   <property name="frameShape">
@@ -2315,7 +2315,7 @@ color: rgb(255, 255, 255);</string>
                                       <string/>
                                      </property>
                                      <property name="placeholderText">
-                                      <string>Type here</string>
+                                      <string>Name of Product</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -2468,7 +2468,18 @@ background-color: rgb(0, 0, 255);</string>
                                </property>
                                <layout class="QVBoxLayout" name="verticalLayout_23">
                                 <item>
-                                 <widget class="QTableWidget" name="tableWidget_2">
+                                 <widget class="QTableWidget" name="productsTable">
+                                  <property name="sizePolicy">
+                                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                    <horstretch>20</horstretch>
+                                    <verstretch>0</verstretch>
+                                   </sizepolicy>
+                                  </property>
+                                  <row>
+                                   <property name="text">
+                                    <string>1</string>
+                                   </property>
+                                  </row>
                                   <column>
                                    <property name="text">
                                     <string>SKU</string>
@@ -2486,7 +2497,7 @@ background-color: rgb(0, 0, 255);</string>
                                   </column>
                                   <column>
                                    <property name="text">
-                                    <string>New Column</string>
+                                    <string>Quantity</string>
                                    </property>
                                   </column>
                                   <column>
@@ -3922,7 +3933,7 @@ p, li { white-space: pre-wrap; }
                    </font>
                   </property>
                   <property name="text">
-                   <string>By: Ali Haider</string>
+                   <string>By: Fahad Karim Khan</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

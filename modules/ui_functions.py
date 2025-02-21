@@ -2,7 +2,7 @@ from modules.app_settings import Settings
 from modules.custom_grips import CustomGrip
 from PyQt5.QtGui import QIcon, QColor
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QParallelAnimationGroup, QTimer, Qt
-from PyQt5.QtWidgets import QPushButton, QSizeGrip
+from PyQt5.QtWidgets import QPushButton, QSizeGrip, QHeaderView
 from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QGraphicsDropShadowEffect
 from main_screen_logic import MasterScreen  # Import the MainApp class from main.py
@@ -20,6 +20,7 @@ class UIFunctions(MasterScreen):
             self.ui.appMargins.setContentsMargins(0, 0, 0, 0)
             self.ui.maximizeRestoreAppBtn.setToolTip("Restore")
             self.ui.maximizeRestoreAppBtn.setIcon(QIcon(u":/icons/images/icons/icon_restore.png"))
+            self.ui.productsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.ui.frame_size_grip.hide()
             self.left_grip.hide()
             self.right_grip.hide()
