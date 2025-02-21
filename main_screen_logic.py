@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    
+    QHeaderView,
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QPushButton, QMessageBox, QMainWindow
@@ -27,6 +27,7 @@ from ui_main import Ui_MainWindow  # Adjust based on your generated class name
 class MasterScreen(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        
         import traceback
 
         try:
@@ -35,6 +36,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             from modules.ui_functions import UIFunctions
             print("here")
             self.ui = self
+            self.ui.productsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.set_buttons_cursor()
 
             self.toggleButton.clicked.connect(lambda: UIFunctions.toggleMenu(self, True))

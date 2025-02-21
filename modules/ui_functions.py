@@ -20,7 +20,7 @@ class UIFunctions(MasterScreen):
             self.ui.appMargins.setContentsMargins(0, 0, 0, 0)
             self.ui.maximizeRestoreAppBtn.setToolTip("Restore")
             self.ui.maximizeRestoreAppBtn.setIcon(QIcon(u":/icons/images/icons/icon_restore.png"))
-            self.ui.productsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            
             self.ui.frame_size_grip.hide()
             self.left_grip.hide()
             self.right_grip.hide()
