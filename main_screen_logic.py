@@ -37,6 +37,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             print("here")
             self.ui = self
             self.ui.productsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            self.ui.shopkeeperTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.set_buttons_cursor()
 
             self.toggleButton.clicked.connect(lambda: UIFunctions.toggleMenu(self, True))
