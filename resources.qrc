@@ -3,7 +3,17 @@
     <file>images/images/Small-logo.ico</file>
   </qresource>
   <qresource prefix="custom">
+    <file>images/custom/inventory20.png</file>
+    <file>images/custom/dashboard20.png</file>
+    <file>images/custom/order20.png</file>
+    <file>images/custom/payment20.png</file>
+    <file>images/custom/product20.png</file>
+    <file>images/custom/receipt20.png</file>
+    <file>images/custom/saleman20.png</file>
+    <file>images/custom/shop20.png</file>
     <file>images/custom/dashboard.png</file>
+    <file>images/custom/inventory.png</file>
+    <file>images/custom/report.png</file>
     <file>images/custom/orders.png</file>
     <file>images/custom/payment2.png</file>
     <file>images/custom/payments.png</file>

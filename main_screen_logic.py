@@ -38,6 +38,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.ui = self
             self.ui.productsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.ui.shopkeeperTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            self.ui.orderDetailTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            self.ui.orderTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.set_buttons_cursor()
 
             self.toggleButton.clicked.connect(lambda: UIFunctions.toggleMenu(self, True))
@@ -56,7 +58,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
                 self.btnProjects,
                 self.btnSensorList,
                 self.btnPlanning,
-                self.btnReportCampaign
+                self.btnReportCampaign,
+                self.btnDashboard
             ]
 
             # Assign menu button clicks
@@ -66,6 +69,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.btnReport.clicked.connect(self.show_multi_tool_menu)
             self.btnSensorList.clicked.connect(self.show_pairip_pass_menu)
             self.btnPlanning.clicked.connect(self.show_offset_leech_menu)
+            self.btnReportCampaign.clicked.connect(self.show_report_campaign_menu)
+            self.btnDashboard.clicked.connect(self.show_dashboard_menu)
 
         except Exception as e:
             error_message = f"Error loading UI: {str(e)}\n\nTraceback:\n{traceback.format_exc()}"
@@ -84,7 +89,12 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         """Initialize backend logic for each page."""
         # Initialize ConfigSystem logic
         self.stackedWidget.setCurrentIndex(0)
-
+    
+    def show_report_campaign_menu(self):
+        self.handleMenuClick(self.btnReportCampaign, 8)
+    
+    def show_dashboard_menu(self):
+        self.handleMenuClick(self.btnDashboard, 7)
 
     def show_config_system(self):
         self.handleMenuClick(self.btnProjects, 0)
