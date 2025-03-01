@@ -1626,7 +1626,7 @@ background-image: url(:/custom/images/custom/receipt20.png);</string>
                    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9.6pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:12pt; font-weight:600; color:#ff79c6;&quot;&gt;PyDracula&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; color:#ffffff;&quot;&gt;An interface created using Python and PySide (support for PyQt), and with colors based on the Dracula theme created by Zeno Rocha.&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; color:#ffffff;&quot;&gt;MIT License&lt;/span&gt;&lt;/p&gt;
@@ -2089,7 +2089,7 @@ background-color:#1159A8;
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>3</number>
+                      <number>4</number>
                      </property>
                      <widget class="QWidget" name="manageProducts">
                       <property name="acceptDrops">
@@ -2977,7 +2977,7 @@ color: rgb(255, 255, 255);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>369</width>
+                                 <width>385</width>
                                  <height>222</height>
                                 </rect>
                                </property>
@@ -4775,25 +4775,9 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                </property>
                                <layout class="QHBoxLayout" name="horizontalLayout_20">
                                 <item>
-                                 <spacer name="horizontalSpacer_9">
-                                  <property name="orientation">
-                                   <enum>Qt::Horizontal</enum>
-                                  </property>
-                                  <property name="sizeType">
-                                   <enum>QSizePolicy::Preferred</enum>
-                                  </property>
-                                  <property name="sizeHint" stdset="0">
-                                   <size>
-                                    <width>40</width>
-                                    <height>20</height>
-                                   </size>
-                                  </property>
-                                 </spacer>
-                                </item>
-                                <item>
                                  <widget class="QFrame" name="frame_31">
                                   <property name="sizePolicy">
-                                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                   <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
                                     <horstretch>0</horstretch>
                                     <verstretch>136</verstretch>
                                    </sizepolicy>
@@ -4831,7 +4815,7 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                     </widget>
                                    </item>
                                    <item row="0" column="1">
-                                    <widget class="QLineEdit" name="txtShopkeeperName_4">
+                                    <widget class="QLineEdit" name="txtOrderInfo">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                                        <horstretch>0</horstretch>
@@ -4841,7 +4825,7 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                      <property name="minimumSize">
                                       <size>
                                        <width>0</width>
-                                       <height>28</height>
+                                       <height>40</height>
                                       </size>
                                      </property>
                                      <property name="font">
@@ -4856,7 +4840,7 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                      <property name="styleSheet">
                                       <string notr="true">background-color: rgb(33, 37, 43);
 color: rgb(255, 255, 255);
-padding: 6px 6px</string>
+</string>
                                      </property>
                                      <property name="text">
                                       <string/>
@@ -4920,12 +4904,18 @@ background-color:#1159A8;
                                     </widget>
                                    </item>
                                    <item row="1" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand_4">
+                                    <widget class="QComboBox" name="cmbxOShopkeeper">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
                                        <verstretch>0</verstretch>
                                       </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>0</width>
+                                       <height>40</height>
+                                      </size>
                                      </property>
                                      <property name="font">
                                       <font>
@@ -4969,13 +4959,19 @@ color: rgb(255, 255, 255);</string>
                                      </item>
                                     </widget>
                                    </item>
-                                   <item row="3" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand_5">
+                                   <item row="2" column="1">
+                                    <widget class="QComboBox" name="cmbxOSaleman">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
                                        <verstretch>0</verstretch>
                                       </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>0</width>
+                                       <height>40</height>
+                                      </size>
                                      </property>
                                      <property name="font">
                                       <font>
@@ -5019,7 +5015,7 @@ color: rgb(255, 255, 255);</string>
                                      </item>
                                     </widget>
                                    </item>
-                                   <item row="3" column="0">
+                                   <item row="2" column="0">
                                     <widget class="QLabel" name="label_53">
                                      <property name="font">
                                       <font>
@@ -5035,13 +5031,35 @@ color: rgb(255, 255, 255);</string>
                                      </property>
                                     </widget>
                                    </item>
+                                   <item row="3" column="1">
+                                    <widget class="QSpinBox" name="spinBox">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>0</width>
+                                       <height>40</height>
+                                      </size>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">background-color: rgb(33, 37, 43);
+font: 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255);</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item row="3" column="0">
+                                    <widget class="QLabel" name="label_2">
+                                     <property name="text">
+                                      <string>Discount % :</string>
+                                     </property>
+                                    </widget>
+                                   </item>
                                   </layout>
                                  </widget>
                                 </item>
                                 <item>
                                  <widget class="QFrame" name="frame_32">
                                   <property name="sizePolicy">
-                                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                     <horstretch>0</horstretch>
                                     <verstretch>136</verstretch>
                                    </sizepolicy>
@@ -5076,12 +5094,18 @@ color: rgb(255, 255, 255);</string>
                                     </widget>
                                    </item>
                                    <item row="0" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand_6">
+                                    <widget class="QComboBox" name="cmbxOProduct">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
                                        <verstretch>0</verstretch>
                                       </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>0</width>
+                                       <height>40</height>
+                                      </size>
                                      </property>
                                      <property name="font">
                                       <font>
@@ -5142,7 +5166,7 @@ color: rgb(255, 255, 255);</string>
                                     </widget>
                                    </item>
                                    <item row="1" column="1">
-                                    <widget class="QLineEdit" name="txtAmountPaid_4">
+                                    <widget class="QLineEdit" name="txtOQuantity">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
@@ -5241,7 +5265,7 @@ padding: 6px 6px</string>
                                      </property>
                                     </widget>
                                    </item>
-                                   <item row="3" column="1">
+                                   <item row="4" column="1">
                                     <spacer name="verticalSpacer_13">
                                      <property name="orientation">
                                       <enum>Qt::Vertical</enum>
@@ -5257,7 +5281,7 @@ padding: 6px 6px</string>
                                      </property>
                                     </spacer>
                                    </item>
-                                   <item row="4" column="1">
+                                   <item row="5" column="1">
                                     <widget class="QPushButton" name="btnAddShopkeeper_4">
                                      <property name="styleSheet">
                                       <string notr="true">QPushButton
@@ -5281,6 +5305,19 @@ background-color:#1159A8;
                                      </property>
                                     </widget>
                                    </item>
+                                   <item row="3" column="1">
+                                    <spacer name="verticalSpacer_15">
+                                     <property name="orientation">
+                                      <enum>Qt::Vertical</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>20</width>
+                                       <height>40</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
                                   </layout>
                                  </widget>
                                 </item>
@@ -5302,6 +5339,12 @@ background-color:#1159A8;
                                 </item>
                                 <item>
                                  <widget class="QFrame" name="frame_34">
+                                  <property name="sizePolicy">
+                                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                   </sizepolicy>
+                                  </property>
                                   <property name="frameShape">
                                    <enum>QFrame::StyledPanel</enum>
                                   </property>
@@ -5333,7 +5376,7 @@ background-color:#1159A8;
                                       <item>
                                        <widget class="QTableWidget" name="orderDetailTable">
                                         <property name="sizePolicy">
-                                         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                                           <horstretch>0</horstretch>
                                           <verstretch>0</verstretch>
                                          </sizepolicy>
@@ -5387,8 +5430,71 @@ background-color:#1159A8;
                                      <property name="frameShadow">
                                       <enum>QFrame::Raised</enum>
                                      </property>
-                                     <layout class="QHBoxLayout" name="horizontalLayout_17">
-                                      <item>
+                                     <layout class="QGridLayout" name="gridLayout_4">
+                                      <item row="0" column="1">
+                                       <widget class="QLabel" name="label_3">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                        </property>
+                                        <property name="font">
+                                         <font>
+                                          <family>Calibri</family>
+                                          <pointsize>13</pointsize>
+                                          <weight>50</weight>
+                                          <italic>false</italic>
+                                          <bold>false</bold>
+                                         </font>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true">font: 13pt &quot;Calibri&quot;;</string>
+                                        </property>
+                                        <property name="text">
+                                         <string>Discount : </string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item row="0" column="2">
+                                       <widget class="QLabel" name="lblDiscount">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                        </property>
+                                        <property name="font">
+                                         <font>
+                                          <family>Calibri</family>
+                                          <pointsize>13</pointsize>
+                                          <weight>50</weight>
+                                          <italic>false</italic>
+                                          <bold>false</bold>
+                                         </font>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true">font: 13pt &quot;Calibri&quot;;</string>
+                                        </property>
+                                        <property name="text">
+                                         <string>100000</string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item row="0" column="0">
+                                       <spacer name="horizontalSpacer_10">
+                                        <property name="orientation">
+                                         <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                         <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </spacer>
+                                      </item>
+                                      <item row="1" column="1">
                                        <widget class="QLabel" name="label">
                                         <property name="sizePolicy">
                                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -5413,20 +5519,7 @@ background-color:#1159A8;
                                         </property>
                                        </widget>
                                       </item>
-                                      <item>
-                                       <spacer name="horizontalSpacer_10">
-                                        <property name="orientation">
-                                         <enum>Qt::Horizontal</enum>
-                                        </property>
-                                        <property name="sizeHint" stdset="0">
-                                         <size>
-                                          <width>40</width>
-                                          <height>20</height>
-                                         </size>
-                                        </property>
-                                       </spacer>
-                                      </item>
-                                      <item>
+                                      <item row="1" column="2">
                                        <widget class="QLabel" name="lblGrandTotal">
                                         <property name="sizePolicy">
                                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -5455,9 +5548,52 @@ background-color:#1159A8;
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QPushButton" name="pushButton_2">
-                                     <property name="styleSheet">
-                                      <string notr="true">QPushButton
+                                    <widget class="QFrame" name="frame_44">
+                                     <property name="frameShape">
+                                      <enum>QFrame::StyledPanel</enum>
+                                     </property>
+                                     <property name="frameShadow">
+                                      <enum>QFrame::Raised</enum>
+                                     </property>
+                                     <layout class="QHBoxLayout" name="horizontalLayout_17">
+                                      <property name="leftMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="topMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="rightMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="bottomMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <item>
+                                       <spacer name="horizontalSpacer_9">
+                                        <property name="orientation">
+                                         <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                         <enum>QSizePolicy::Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                         <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </spacer>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="pushButton_2">
+                                        <property name="minimumSize">
+                                         <size>
+                                          <width>250</width>
+                                          <height>0</height>
+                                         </size>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true">QPushButton
 {
     background-color: #D32F2F; /* Dark Red */
     color: white;
@@ -5472,10 +5608,13 @@ QPushButton:hover
     background-color: #B71C1C; /* Darker Red on Hover */
 }
 </string>
-                                     </property>
-                                     <property name="text">
-                                      <string>Finish Order</string>
-                                     </property>
+                                        </property>
+                                        <property name="text">
+                                         <string>Finish Order</string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                     </layout>
                                     </widget>
                                    </item>
                                   </layout>

@@ -124,7 +124,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.shopkeeperTable.setRowCount(0)
 
         # Adjust column count to include the ID column (hidden)
-        self.ui.shopkeeperTable.setColumnCount(10)  # Ensure correct number of columns
+        self.ui.shopkeeperTable.setColumnCount(11)  # Ensure correct number of columns
         self.ui.shopkeeperTable.setHorizontalHeaderLabels([
             "ID", "Name", "Brand", "Contact Info", "Total Due", "Paid Amount", "Remaining", "Last Submission", "Edit", "Delete", "View"
         ])
@@ -132,15 +132,22 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.shopkeeperTable.setColumnHidden(0, True)  # Hide the ID column
 
         # Insert data into the table
-        for rowIndex, rowData in enumerate(shopkeepers):
+        for rowData in shopkeepers:
+            isDeleted = rowData[-1]  # Assuming IsDeleted is the last column
+            if isDeleted in (1, True):  # Skip if marked as deleted
+                continue
+
+            rowIndex = self.ui.shopkeeperTable.rowCount()
             self.ui.shopkeeperTable.insertRow(rowIndex)
-            for colIndex, value in enumerate(rowData):  # Do not skip ID column now
+            
+            for colIndex, value in enumerate(rowData[:-1]):  # Exclude IsDeleted column
                 item = QTableWidgetItem(str(value) if value is not None else "N/A")
                 self.ui.shopkeeperTable.setItem(rowIndex, colIndex, item)
 
             # Add buttons for Edit, Delete, and View
             shopkeeperID = rowData[0]  # Ensure correct ID is fetched
             self.addShopkeeperTableButtons(rowIndex, shopkeeperID)
+
 
 
 
