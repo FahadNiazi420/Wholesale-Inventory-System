@@ -40,6 +40,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.ui.shopkeeperTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.ui.orderDetailTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.ui.orderTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             self.set_buttons_cursor()
 
             self.toggleButton.clicked.connect(lambda: UIFunctions.toggleMenu(self, True))
