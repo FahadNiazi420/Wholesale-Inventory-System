@@ -22,6 +22,11 @@ def initializeDb():
             price REAL NOT NULL,
             lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP
         );
+        CREATE TABLE Shopkeepers (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name TEXT NOT NULL,
+            Contact_Info TEXT);
+)
         ''')
 
         conn.commit()

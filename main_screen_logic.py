@@ -24,7 +24,7 @@ import os
 import sys
 import os
 
-from BL import productManager
+from BL import productManager, shopkeeperManager
 
 
 from ui_main import Ui_MainWindow  # Adjust based on your generated class name
@@ -70,6 +70,10 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.btnReportCampaign.clicked.connect(self.show_report_campaign_menu)
             self.btnDashboard.clicked.connect(self.show_dashboard_menu)
 
+            # --------------------- SHOPKEEPER PAGE BUTTONS ---------------------
+            self.ui.btnAddShopkeeper.clicked.connect(self.onAddShopkeeperClick)
+            self.fillShopkeeperTable()
+
             # --------------------- PRODUCT PAGE BUTTON ---------------------
             self.ui.btnAddProduct.clicked.connect(self.onAddProductClick)
             self.fillProductsTable()
@@ -79,7 +83,160 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             print(error_message)  # Print to console for debugging
             self.show_message_box("Critical Error", error_message)
 
-# --------------------- PRODUCT FUNCTIONS ---------------------
+# ------------------------------------------------------ SHOPKEEPER FUNCTION ------------------------------------------------------
+    def onAddShopkeeperClick(self):
+        """Handles the add/edit shopkeeper button click event."""
+        try:
+            name = self.ui.txtShopkeeperName.text().strip()
+            contact = self.ui.txtShopkeeperContact.text().strip()
+
+            if not name or not contact:
+                QMessageBox.warning(None, "Input Error", "Please fill all fields correctly before proceeding.")
+                return
+
+            if self.ui.btnAddShopkeeper.text() == "Edit Shopkeeper":
+                success, message = shopkeeperManager.updateShopkeeper(self.editingShopkeeperID, name, contact)
+            else:
+                success, message = shopkeeperManager.addShopkeeper(name, contact)
+
+            if success:
+                QMessageBox.information(None, "Success", message)
+                self.resetShopkeeperForm()
+                self.fillShopkeeperTable()  # Refresh table after update
+            else:
+                QMessageBox.warning(None, "Error", message)
+
+            # Reset button text
+            self.ui.btnAddShopkeeper.setText("Add Shopkeeper")
+            self.editingShopkeeperID = None  # Clear tracking variable
+
+        except Exception as e:
+            QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
+    def fillShopkeeperTable(self):
+        """Fetches shopkeeper data and fills the shopkeeperTable widget with Edit, Delete, and View buttons."""
+        shopkeepers, error = shopkeeperManager.getShopkeepers()
+
+        if error:
+            QMessageBox.critical(None, "Error", error)
+            return
+
+        # Clear existing data
+        self.ui.shopkeeperTable.setRowCount(0)
+
+        # Set column headers
+        self.ui.shopkeeperTable.setColumnCount(9)  # Adjusted column count
+        self.ui.shopkeeperTable.setHorizontalHeaderLabels([
+            "Name", "Brand", "Contact Info", "Total Due", "Paid Amount", "Remaining", "Last Submission", "Edit", "Delete", "View"
+        ])
+
+        # Insert data into the table
+        for rowIndex, rowData in enumerate(shopkeepers):
+            self.ui.shopkeeperTable.insertRow(rowIndex)
+            for colIndex, value in enumerate(rowData[1:]):  # Skip the ID column
+                item = QTableWidgetItem(str(value) if value is not None else "N/A")
+                self.ui.shopkeeperTable.setItem(rowIndex, colIndex, item)
+
+            # Add buttons for Edit, Delete, and View
+            self.addShopkeeperTableButtons(rowIndex, shopkeepers[rowIndex][0])  # Pass ID as the unique identifier
+
+    def onEditShopkeeper(self, rowIndex):
+        """Handles the edit shopkeeper button click by filling form fields with selected shopkeeper data."""
+        try:
+            rowIndex = int(rowIndex)  # Ensure rowIndex is an integer
+
+            # Set values in input fields directly
+            self.editingShopkeeperID = self.ui.shopkeeperTable.item(rowIndex, 0).text()
+            self.ui.txtShopkeeperName.setText(self.ui.shopkeeperTable.item(rowIndex, 0).text())
+            self.ui.txtShopkeeperContact.setText(self.ui.shopkeeperTable.item(rowIndex, 2).text())
+
+            # Change button text and store ID for tracking updates
+            self.ui.btnAddShopkeeper.setText("Edit Shopkeeper")
+
+        except Exception as e:
+            QMessageBox.critical(None, "Error", f"Could not load shopkeeper details: {str(e)}")
+
+    def onDeleteShopkeeper(self, shopkeeperID):
+        """Handles the delete shopkeeper button click."""
+        confirm = QMessageBox.question(None, "Delete Shopkeeper", f"Are you sure you want to delete Shopkeeper ID: {shopkeeperID}?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if confirm == QMessageBox.Yes:
+            success, error = shopkeeperManager.deleteShopkeeper(shopkeeperID)
+            if success:
+                QMessageBox.information(None, "Success", "Shopkeeper deleted successfully!")
+                self.fillShopkeeperTable()  # Refresh table after deletion
+            else:
+                QMessageBox.critical(None, "Error", error)
+
+    def onViewShopkeeper(self, shopkeeperID=None):
+        """Handles the view shopkeeper button click and displays shopkeeper details from the selected row."""
+        try:
+            table = self.ui.shopkeeperTable
+            rowIndex = table.currentRow()  # Get the selected row index
+
+            if rowIndex < 0:
+                QMessageBox.warning(None, "Warning", "Please select a shopkeeper row to view details.")
+                return
+
+            # Extract data from the selected row
+            shopkeeperID = table.item(rowIndex, 0).text() if table.item(rowIndex, 0) else "N/A"
+            name = table.item(rowIndex, 0).text() if table.item(rowIndex, 0) else "N/A"
+            contact = table.item(rowIndex, 2).text() if table.item(rowIndex, 2) else "N/A"
+
+            # Format the details with spacing and font size
+            details = f"""
+            <html>
+            <body style="font-size:12pt;">
+                <table border="0" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 200%;">
+                    <tr>
+                        <th align="left">Field</th>
+                        <th align="left">Value</th>
+                    </tr>
+                    <tr>
+                        <td><b>ID</b></td>
+                        <td>{shopkeeperID}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Name</b></td>
+                        <td>{name}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Contact</b></td>
+                        <td>{contact}</td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """
+
+            # Show details in a message box
+            QMessageBox.information(None, "Shopkeeper Details", details)
+
+        except Exception as e:
+            QMessageBox.critical(None, "Error", f"Unexpected error while viewing shopkeeper: {e}")
+    def addShopkeeperTableButtons(self, rowIndex, shopkeeperID):
+        """Adds Edit, Delete, and View buttons to the shopkeeperTable row."""
+        # Create buttons
+        editButton = QPushButton("Edit")
+        deleteButton = QPushButton("Delete")
+        viewButton = QPushButton("View")
+
+        # Connect buttons to their respective methods
+        editButton.clicked.connect(lambda: self.onEditShopkeeper(rowIndex))  # Pass rowIndex instead of ID
+        deleteButton.clicked.connect(lambda: self.onDeleteShopkeeper(shopkeeperID))
+        viewButton.clicked.connect(lambda: self.onViewShopkeeper(shopkeeperID))
+
+        # Set buttons inside respective cells
+        self.ui.shopkeeperTable.setCellWidget(rowIndex, 7, editButton)  # Edit column
+        self.ui.shopkeeperTable.setCellWidget(rowIndex, 8, deleteButton)  # Delete column
+        self.ui.shopkeeperTable.setCellWidget(rowIndex, 9, viewButton)  # View column
+    def resetShopkeeperForm(self):
+        """Resets the shopkeeper input fields to default values."""
+        self.ui.txtShopkeeperName.clear()
+        self.ui.txtShopkeeperContact.clear()
+
+        self.ui.btnAddShopkeeper.setText("Add Shopkeeper")
+        self.editingShopkeeperID = None
+# ------------------------------------------------------ PRODUCT FUNCTIONS -------------------------------------------------------
     def onAddProductClick(self):
         """Handles the add/edit product button click event."""
         try:
@@ -112,7 +269,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         except Exception as e:
             QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
-
     
     def fillProductsTable(self):
         """Fetches product data and fills the productsTable widget with Edit, Delete, and View buttons."""

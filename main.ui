@@ -2089,7 +2089,7 @@ background-color:#1159A8;
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>3</number>
                      </property>
                      <widget class="QWidget" name="manageProducts">
                       <property name="acceptDrops">
@@ -3694,134 +3694,7 @@ padding: 6px 6px</string>
                                      </property>
                                     </widget>
                                    </item>
-                                   <item row="2" column="0">
-                                    <widget class="QLabel" name="label_37">
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>Brand : </string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="2" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand">
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>11</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="autoFillBackground">
-                                      <bool>false</bool>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);</string>
-                                     </property>
-                                     <property name="iconSize">
-                                      <size>
-                                       <width>16</width>
-                                       <height>16</height>
-                                      </size>
-                                     </property>
-                                     <property name="frame">
-                                      <bool>true</bool>
-                                     </property>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 1</string>
-                                      </property>
-                                     </item>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 2</string>
-                                      </property>
-                                     </item>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 3</string>
-                                      </property>
-                                     </item>
-                                    </widget>
-                                   </item>
-                                   <item row="4" column="0">
-                                    <widget class="QLabel" name="label_38">
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>Total Dues : </string>
-                                     </property>
-                                    </widget>
-                                   </item>
                                    <item row="4" column="1">
-                                    <widget class="QLineEdit" name="txtTotalDues">
-                                     <property name="enabled">
-                                      <bool>false</bool>
-                                     </property>
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>0</width>
-                                       <height>28</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>12</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);
-padding: 6px 6px</string>
-                                     </property>
-                                     <property name="inputMask">
-                                      <string>00000000000000000000</string>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="readOnly">
-                                      <bool>true</bool>
-                                     </property>
-                                     <property name="placeholderText">
-                                      <string>Total Pending Dues</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="6" column="1">
                                     <spacer name="verticalSpacer_2">
                                      <property name="orientation">
                                       <enum>Qt::Vertical</enum>
@@ -3834,7 +3707,7 @@ padding: 6px 6px</string>
                                      </property>
                                     </spacer>
                                    </item>
-                                   <item row="5" column="1">
+                                   <item row="2" column="1">
                                     <spacer name="verticalSpacer_4">
                                      <property name="orientation">
                                       <enum>Qt::Vertical</enum>
@@ -3888,7 +3761,7 @@ padding: 6px 6px</string>
                                     </widget>
                                    </item>
                                    <item row="0" column="1">
-                                    <widget class="QLineEdit" name="txtSpkContact">
+                                    <widget class="QLineEdit" name="txtShopkeeperContact">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
@@ -3926,123 +3799,7 @@ padding: 6px 6px</string>
                                      </property>
                                     </widget>
                                    </item>
-                                   <item row="2" column="0">
-                                    <widget class="QLabel" name="label_33">
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>Last Payment : </string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="2" column="1">
-                                    <widget class="QLineEdit" name="dateLastPayment">
-                                     <property name="enabled">
-                                      <bool>false</bool>
-                                     </property>
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>0</width>
-                                       <height>28</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>12</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);
-padding: 6px 6px</string>
-                                     </property>
-                                     <property name="text">
-                                      <string>12/02/2025</string>
-                                     </property>
-                                     <property name="readOnly">
-                                      <bool>true</bool>
-                                     </property>
-                                     <property name="placeholderText">
-                                      <string/>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="4" column="0">
-                                    <widget class="QLabel" name="label_34">
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>Amount Paid : </string>
-                                     </property>
-                                    </widget>
-                                   </item>
                                    <item row="4" column="1">
-                                    <widget class="QLineEdit" name="txtAmountPaid">
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>0</width>
-                                       <height>28</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>12</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);
-padding: 6px 6px</string>
-                                     </property>
-                                     <property name="inputMask">
-                                      <string>00000000000000000000</string>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="maxLength">
-                                      <number>20</number>
-                                     </property>
-                                     <property name="placeholderText">
-                                      <string>Amount Paid</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="6" column="1">
                                     <spacer name="verticalSpacer_3">
                                      <property name="orientation">
                                       <enum>Qt::Vertical</enum>
@@ -4058,7 +3815,7 @@ padding: 6px 6px</string>
                                      </property>
                                     </spacer>
                                    </item>
-                                   <item row="7" column="1">
+                                   <item row="5" column="1">
                                     <widget class="QPushButton" name="btnAddShopkeeper">
                                      <property name="styleSheet">
                                       <string notr="true">QPushButton
@@ -4118,6 +3875,19 @@ background-color:#1159A8;
                                <layout class="QHBoxLayout" name="horizontalLayout_10">
                                 <item>
                                  <widget class="QTableWidget" name="shopkeeperTable">
+                                  <property name="autoFillBackground">
+                                   <bool>false</bool>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
+                                  </property>
+                                  <property name="editTriggers">
+                                   <set>QAbstractItemView::NoEditTriggers</set>
+                                  </property>
+                                  <property name="sortingEnabled">
+                                   <bool>true</bool>
+                                  </property>
                                   <row>
                                    <property name="text">
                                     <string>New Row</string>
@@ -4255,7 +4025,7 @@ background-color:#1159A8;
 font: 75 14pt &quot;Calibri&quot;;</string>
                                </property>
                                <property name="text">
-                                <string>Payments</string>
+                                <string>Payments / Khata</string>
                                </property>
                               </widget>
                              </item>
@@ -4824,6 +4594,13 @@ background-color:#1159A8;
                                <layout class="QHBoxLayout" name="horizontalLayout_14">
                                 <item>
                                  <widget class="QTableWidget" name="paymentsTable">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
+                                  </property>
+                                  <property name="editTriggers">
+                                   <set>QAbstractItemView::NoEditTriggers</set>
+                                  </property>
                                   <row>
                                    <property name="text">
                                     <string>New Row</string>
@@ -5740,6 +5517,13 @@ QPushButton:hover
                                <layout class="QHBoxLayout" name="horizontalLayout_18">
                                 <item>
                                  <widget class="QTableWidget" name="orderTable">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
+                                  </property>
+                                  <property name="editTriggers">
+                                   <set>QAbstractItemView::NoEditTriggers</set>
+                                  </property>
                                   <row>
                                    <property name="text">
                                     <string>1</string>
@@ -6444,6 +6228,13 @@ color: rgb(255, 255, 255);</string>
                                <layout class="QHBoxLayout" name="horizontalLayout_21">
                                 <item>
                                  <widget class="QTableWidget" name="returnsTable">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
+                                  </property>
+                                  <property name="editTriggers">
+                                   <set>QAbstractItemView::NoEditTriggers</set>
+                                  </property>
                                   <row>
                                    <property name="text">
                                     <string>New Row</string>
@@ -6896,6 +6687,13 @@ background-color:#1159A8;
                                <layout class="QHBoxLayout" name="horizontalLayout_24">
                                 <item>
                                  <widget class="QTableWidget" name="salesmanTable">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
+                                  </property>
+                                  <property name="editTriggers">
+                                   <set>QAbstractItemView::NoEditTriggers</set>
+                                  </property>
                                   <row>
                                    <property name="text">
                                     <string>New Row</string>
