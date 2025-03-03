@@ -121,7 +121,8 @@ def getOrders():
         conn = getDbConnection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT o.Order_ID, s.Name AS Shopkeeper, sm.Name AS Salesman, o.Order_Date, o.Total_Amount, d.Discount_Amount
+            SELECT o.Order_ID,o.Order_Info , s.Name AS Shopkeeper, sm.Name AS Salesman, o.Order_Date, o.Total_Amount, 
+               (o.Total_Amount * d.Discount_Amount / 100) AS Discount_Amount, o.Total_Amount-(o.Total_Amount * d.Discount_Amount / 100) AS Grand_Total
             FROM Orders o
             JOIN Shopkeepers s ON o.Shopkeeper_ID = s.ID
             JOIN Salesmen sm ON o.Salesman_ID = sm.ID
@@ -154,22 +155,22 @@ def getOrderDetails(order_id):
     finally:
         conn.close()
 
-def getOrderItems(order_id):
-    try:
-        conn = getDbConnection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT oi.Product_SKU, p.Name, oi.Quantity, oi.Price, (oi.Quantity * oi.Price) AS Total
-            FROM Order_Items oi
-            JOIN Products p ON oi.Product_SKU = p.SKU
-            WHERE oi.Order_ID = ? AND oi.IsDeleted = 0
-        """, (order_id,))
-        order_items = cursor.fetchall()
-        return order_items, None
-    except Exception as e:
-        return None, str(e)
-    finally:
-        conn.close()
+# def getOrderItems(order_id):
+#     try:
+#         conn = getDbConnection()
+#         cursor = conn.cursor()
+#         cursor.execute("""
+#             SELECT oi.Product_SKU, p.Name, oi.Quantity, oi.Price, (oi.Quantity * oi.Price) AS Total
+#             FROM Order_Items oi
+#             JOIN Products p ON oi.Product_SKU = p.SKU
+#             WHERE oi.Order_ID = ? AND oi.IsDeleted = 0
+#         """, (order_id,))
+#         order_items = cursor.fetchall()
+#         return order_items, None
+#     except Exception as e:
+#         return None, str(e)
+#     finally:
+#         conn.close()
 
 def deleteOrder(order_id):
     try:
@@ -201,7 +202,7 @@ def calculateOrderTotals(order_id):
         total_amount = result[0] if result[0] else 0
         discount = (result[1] / 100) * total_amount if result[1] else 0
         grand_total = total_amount - discount
-        return discount, grand_total
+        return total_amount,discount, grand_total
     except Exception as e:
         return None, None, None, str(e)
     finally:
@@ -237,12 +238,12 @@ def getSalesmen():
         conn.close()
 
 def getProducts():
-    """Fetch all products with SKU and name for the combo box."""
+    """Fetch all products with SKU, name, and size for the combo box."""
     try:
         conn = getDbConnection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT SKU, Name FROM Products
+            SELECT SKU, Name, Size FROM Products
         """)
         products = cursor.fetchall()
         return products, None
@@ -250,6 +251,7 @@ def getProducts():
         return None, str(e)
     finally:
         conn.close()
+
 
 def getProductPrice(sku):
     """Fetch product price per item and available quantity based on SKU."""
@@ -281,17 +283,21 @@ def getOrderItems(order_id):
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT oi.Order_Item_ID, p.Product_Name, oi.Quantity, oi.Quantity * oi.Price AS Bill
+            SELECT oi.Order_Item_ID, p.Name, oi.Quantity,  oi.Price AS Bill
             FROM Order_Items oi
             JOIN Products p ON oi.Product_SKU = p.SKU
             WHERE oi.Order_ID = ? AND oi.IsDeleted = 0
         """, (order_id,))
 
-        return cursor.fetchall()  # Returns list of tuples (id, product, qty, bill)
+        items = cursor.fetchall()
+        # print(f"Fetched {len(items)} items for Order ID {order_id}: {items}")  # Debugging line
+        return items  
     except Exception as e:
+        print(f"Error fetching order items: {e}")  # Debugging line
         return []
     finally:
         conn.close()
+
 
 def getOrderItemById(order_item_id):
     """Fetch a single order item for editing."""

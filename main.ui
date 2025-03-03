@@ -837,15 +837,19 @@ Button */
                    <enum>Qt::LeftToRight</enum>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-image: url(:/custom/images/custom/dashboard20.png);</string>
+                   <string notr="true">padding : -3px;</string>
                   </property>
                   <property name="text">
-                   <string>Dashboard</string>
+                   <string>     Dashboard</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="resources.qrc">
+                    <normaloff>:/custom/images/custom/dashboard.png</normaloff>:/custom/images/custom/dashboard.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>20</width>
-                    <height>20</height>
+                    <width>25</width>
+                    <height>25</height>
                    </size>
                   </property>
                  </widget>
@@ -5376,7 +5380,7 @@ color: rgb(255, 255, 255);</string>
                                       <enum>QFrame::Raised</enum>
                                      </property>
                                      <layout class="QGridLayout" name="gridLayout_4">
-                                      <item row="0" column="1">
+                                      <item row="0" column="4">
                                        <widget class="QLabel" name="label_3">
                                         <property name="sizePolicy">
                                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -5401,7 +5405,7 @@ color: rgb(255, 255, 255);</string>
                                         </property>
                                        </widget>
                                       </item>
-                                      <item row="0" column="2">
+                                      <item row="0" column="5">
                                        <widget class="QLabel" name="lblDiscount">
                                         <property name="sizePolicy">
                                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -5426,20 +5430,57 @@ color: rgb(255, 255, 255);</string>
                                         </property>
                                        </widget>
                                       </item>
-                                      <item row="0" column="0">
-                                       <spacer name="horizontalSpacer_10">
-                                        <property name="orientation">
-                                         <enum>Qt::Horizontal</enum>
+                                      <item row="0" column="2">
+                                       <widget class="QLabel" name="lblTotal">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
                                         </property>
-                                        <property name="sizeHint" stdset="0">
-                                         <size>
-                                          <width>40</width>
-                                          <height>20</height>
-                                         </size>
+                                        <property name="font">
+                                         <font>
+                                          <family>Calibri</family>
+                                          <pointsize>13</pointsize>
+                                          <weight>50</weight>
+                                          <italic>false</italic>
+                                          <bold>false</bold>
+                                         </font>
                                         </property>
-                                       </spacer>
+                                        <property name="styleSheet">
+                                         <string notr="true">font: 13pt &quot;Calibri&quot;;</string>
+                                        </property>
+                                        <property name="text">
+                                         <string>0</string>
+                                        </property>
+                                       </widget>
                                       </item>
-                                      <item row="1" column="1">
+                                      <item row="1" column="5">
+                                       <widget class="QLabel" name="lblGrandTotal">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                        </property>
+                                        <property name="font">
+                                         <font>
+                                          <family>Calibri</family>
+                                          <pointsize>13</pointsize>
+                                          <weight>50</weight>
+                                          <italic>false</italic>
+                                          <bold>false</bold>
+                                         </font>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true">font: 13pt &quot;Calibri&quot;;</string>
+                                        </property>
+                                        <property name="text">
+                                         <string>0</string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item row="1" column="4">
                                        <widget class="QLabel" name="label">
                                         <property name="sizePolicy">
                                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -5464,8 +5505,8 @@ color: rgb(255, 255, 255);</string>
                                         </property>
                                        </widget>
                                       </item>
-                                      <item row="1" column="2">
-                                       <widget class="QLabel" name="lblGrandTotal">
+                                      <item row="0" column="1">
+                                       <widget class="QLabel" name="label_11">
                                         <property name="sizePolicy">
                                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                                           <horstretch>0</horstretch>
@@ -5485,9 +5526,35 @@ color: rgb(255, 255, 255);</string>
                                          <string notr="true">font: 13pt &quot;Calibri&quot;;</string>
                                         </property>
                                         <property name="text">
-                                         <string>0</string>
+                                         <string>Total : </string>
                                         </property>
                                        </widget>
+                                      </item>
+                                      <item row="0" column="0">
+                                       <spacer name="horizontalSpacer_10">
+                                        <property name="orientation">
+                                         <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                         <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </spacer>
+                                      </item>
+                                      <item row="0" column="3">
+                                       <spacer name="horizontalSpacer_15">
+                                        <property name="orientation">
+                                         <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                         <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </spacer>
                                       </item>
                                      </layout>
                                     </widget>
@@ -5630,22 +5697,12 @@ color: rgb(255, 255, 255);</string>
                                   </column>
                                   <column>
                                    <property name="text">
-                                    <string>Product</string>
-                                   </property>
-                                  </column>
-                                  <column>
-                                   <property name="text">
-                                    <string>Brand</string>
-                                   </property>
-                                  </column>
-                                  <column>
-                                   <property name="text">
-                                    <string>Size</string>
-                                   </property>
-                                  </column>
-                                  <column>
-                                   <property name="text">
                                     <string>Quantity</string>
+                                   </property>
+                                  </column>
+                                  <column>
+                                   <property name="text">
+                                    <string>Discount</string>
                                    </property>
                                   </column>
                                   <column>

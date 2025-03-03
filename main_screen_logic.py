@@ -140,6 +140,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         success, message = orderManager.addOrderItem(self.current_order_id, product_sku, quantity, calculated_price)
         if success:
             self.updateOrderSummary()
+            self.fillOrderDetailTable()
             QMessageBox.information(self, "Success", message)
         else:
             QMessageBox.critical(self, "Error", message)
@@ -152,6 +153,10 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.orderDetailTable.setRowCount(0)  # Clear table
         order_id = self.current_order_id
         items = orderDL.getOrderItems(order_id)  # Fetch order items
+        # print("Current Order ID in fill order detail: ", self.current_order_id)
+        # print("Items in fill order detail: ", items)
+        if not items:
+            return  # No items to display
 
         for row_index, (order_item_id, product_name, quantity, bill) in enumerate(items):
             self.ui.orderDetailTable.insertRow(row_index)
@@ -225,7 +230,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
     def updateOrderSummary(self):
         """Updates the discount and grand total labels based on added items."""
-        discount, grand_total = orderDL.calculateOrderTotals(self.current_order_id)
+        total_amount,discount, grand_total = orderDL.calculateOrderTotals(self.current_order_id)
+        self.ui.lblTotal.setText(f"{total_amount:.2f}")
         self.ui.lblDiscount.setText(f"{discount:.2f}")
         self.ui.lblGrandTotal.setText(f"{grand_total:.2f}")
 
@@ -248,19 +254,22 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             return
         
         self.ui.orderTable.setRowCount(0)
-        self.ui.orderTable.setColumnCount(10)
+        self.ui.orderTable.setColumnCount(10)  # Adjusted column count to include all columns
         self.ui.orderTable.setHorizontalHeaderLabels([
-            "Order ID", "Shopkeeper", "Salesman", "Date", "Total Amount", "Discount", "Grand Total", "Edit", "Delete", "View"
+            "Order Info", "Shopkeeper", "Salesman", "Date", "Total Amount", "Discount", "Grand Total", "Edit", "Delete", "View"
         ])
         
         for rowIndex, rowData in enumerate(orders):
             self.ui.orderTable.insertRow(rowIndex)
-            for colIndex, value in enumerate(rowData[:7]):  # First 7 columns are data
+            for colIndex, value in enumerate(rowData[1:]):  # Skip the first column (Order ID)
                 item = QTableWidgetItem(str(value) if value is not None else "N/A")
                 self.ui.orderTable.setItem(rowIndex, colIndex, item)
             
-            self.addOrderTableButtons(rowIndex, rowData[0])
-    
+            self.addOrderTableButtons(rowIndex, rowData[0])  # Pass Order ID to button handlers
+
+        self.ui.orderTable.setColumnHidden(0, False)  # Ensure the Order Info column is visible
+        self.ui.orderTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)  # Ensure columns are visible
+
     def addOrderTableButtons(self, rowIndex, orderID):
         """Adds Edit, Delete, and View buttons to the orderTable for a specific order."""
         editButton = QPushButton("Edit")
@@ -295,21 +304,24 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.cmbxOSaleman.clear()
         self.ui.cmbxOProduct.clear()
 
+        # Fill Shopkeepers
         shopkeepers, _ = orderDL.getShopkeepers()
         if shopkeepers:
             for sk in shopkeepers:
                 self.ui.cmbxOShopkeeper.addItem(sk[1], sk[0])  # Name as display, ID as data
 
+        # Fill Salesmen
         salesmen, _ = orderDL.getSalesmen()
         if salesmen:
             for sm in salesmen:
-                self.ui.cmbxOSaleman.addItem(sm[1], sm[0])
+                self.ui.cmbxOSaleman.addItem(sm[1], sm[0])  # Name as display, ID as data
 
+        # Fill Products with SKU - Name - Size format
         products, _ = orderDL.getProducts()
         if products:
             for p in products:
-                self.ui.cmbxOProduct.addItem(p[1], p[0])
-
+                display_text = f"{p[0]} - {p[1]} - {p[2]}"  # SKU - Name - Size
+                self.ui.cmbxOProduct.addItem(display_text, p[0])  # Display full text, store SKU as data
 
 
     def resetOrderForm(self):
@@ -322,6 +334,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.numDiscount.setValue(0)
         self.ui.lblDiscount.setText("0.00")
         self.ui.lblGrandTotal.setText("0.00")
+        self.ui.lblTotal.setText("0.00")
         self.current_order_id = None
 
 
@@ -717,6 +730,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
     def show_pairip_pass_menu(self):
         """Show the Pair IP Pass page."""
         self.handleMenuClick(self.btnSensorList, 4)
+        self.fillOrderComboboxes()
 
     def show_offset_leech_menu(self):
         """Show the Offset Leech page."""
