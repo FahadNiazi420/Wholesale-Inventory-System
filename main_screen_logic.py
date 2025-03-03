@@ -204,7 +204,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         # Set values in the UI fields
         self.ui.cmbxOProduct.setCurrentText(product_sku)
-        self.ui.numOQuantity.setValue(quantity)
+        self.ui.numOQuantity.setValue(int(quantity))
         self.ui.txtOBill.setText(f"{bill:.2f}")
 
         # Store current order_item_id for update action
@@ -280,8 +280,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.orderTable.setCellWidget(rowIndex, 7, editButton)  # Adjust column index based on your table
         self.ui.orderTable.setCellWidget(rowIndex, 8, deleteButton)
         self.ui.orderTable.setCellWidget(rowIndex, 9, viewButton)
-
-    
+ 
     def viewOrder(self, orderID):
         """Handles the view order button click and displays order details."""
         try:
@@ -363,7 +362,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.ui.cmbxOShopkeeper.setCurrentIndex(self.ui.cmbxOShopkeeper.findData(shopkeeper_name))
             self.ui.cmbxOSaleman.setCurrentIndex(self.ui.cmbxOSaleman.findData(salesman_name))
             self.ui.txtOrderInfo.setText(order_info)
-            self.ui.numDiscount.setValue(discount_amount)
+            self.ui.numDiscount.setValue(int(discount_amount))
 
             # Enable order item addition
             self.ui.cmbxOProduct.setEnabled(True)
