@@ -9,9 +9,9 @@ def addOrder(shopkeeper_id, salesman_id, order_info, discount):
 
         # Insert into Orders table
         cursor.execute("""
-            INSERT INTO Orders (Shopkeeper_ID, Salesman_ID, Total_Amount)
-            VALUES (?, ?, 0)
-        """, (shopkeeper_id, salesman_id))
+            INSERT INTO Orders (Shopkeeper_ID, Salesman_ID, Total_Amount, Order_Info)
+            VALUES (?, ?, 0,?)
+        """, (shopkeeper_id, salesman_id,order_info))
         order_id = cursor.lastrowid  # Get the generated order ID
 
         # Insert into Discounts table

@@ -2554,6 +2554,11 @@ class Ui_MainWindow(object):
         self.label_53.setObjectName("label_53")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_53)
         self.numDiscount = QtWidgets.QSpinBox(self.orderFrame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.numDiscount.sizePolicy().hasHeightForWidth())
+        self.numDiscount.setSizePolicy(sizePolicy)
         self.numDiscount.setMinimumSize(QtCore.QSize(0, 40))
         self.numDiscount.setStyleSheet("background-color: rgb(33, 37, 43);\n"
 "font: 10pt \"MS Shell Dlg 2\";\n"
@@ -2657,6 +2662,7 @@ class Ui_MainWindow(object):
         self.numOQuantity.setStyleSheet("background-color: rgb(33, 37, 43);\n"
 "color: rgb(255, 255, 255);\n"
 "font: 10pt \"MS Shell Dlg 2\";")
+        self.numOQuantity.setMaximum(999999999)
         self.numOQuantity.setObjectName("numOQuantity")
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.numOQuantity)
         self.txtOBill = QtWidgets.QLabel(self.orderDetailFrame)
