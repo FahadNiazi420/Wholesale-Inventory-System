@@ -191,6 +191,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         if success:
             QMessageBox.information(self, "Success", "Item deleted successfully!")
             self.fillOrderDetailTable()  # Refresh the table
+            self.updateOrderSummary()
         else:
             QMessageBox.critical(self, "Error", message)
 
