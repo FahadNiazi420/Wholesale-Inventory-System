@@ -78,28 +78,6 @@ def updateOrder(order_id, shopkeeper_id, salesman_id, discount):
     finally:
         conn.close()
 
-# def addItem(order_id, product_sku, quantity, price):
-#     try:
-#         conn = getDbConnection()
-#         cursor = conn.cursor()
-#         cursor.execute("""
-#             INSERT INTO Order_Items (Order_ID, Product_SKU, Quantity, Price)
-#             VALUES (?, ?, ?, ?)
-#         """, (order_id, product_sku, quantity, price))
-
-#         cursor.execute("""
-#             UPDATE Orders
-#             SET Total_Amount = Total_Amount + ?
-#             WHERE Order_ID = ?
-#         """, (quantity * price, order_id))
-
-#         conn.commit()
-#         return True, "Item added successfully!"
-#     except Exception as e:
-#         return False, str(e)
-#     finally:
-#         conn.close()
-
 def finalizeOrder(order_id):
     try:
         conn = getDbConnection()
@@ -116,6 +94,7 @@ def finalizeOrder(order_id):
         return False, str(e)
     finally:
         conn.close()
+
 def getOrders():
     try:
         conn = getDbConnection()
@@ -188,6 +167,27 @@ def deleteOrder(order_id):
     finally:
         conn.close()
 
+def getOrderById(order_id):
+    """Fetch a single order by its ID."""
+    try:
+        conn = getDbConnection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT o.Order_ID, o.Order_Info, s.Name AS Shopkeeper, sm.Name AS Salesman, o.Order_Date, o.Total_Amount, 
+                   (o.Total_Amount * d.Discount_Amount / 100) AS Discount_Amount, o.Total_Amount-(o.Total_Amount * d.Discount_Amount / 100) AS Grand_Total
+            FROM Orders o
+            JOIN Shopkeepers s ON o.Shopkeeper_ID = s.ID
+            JOIN Salesmen sm ON o.Salesman_ID = sm.ID
+            LEFT JOIN Discounts d ON o.Order_ID = d.Order_ID
+            WHERE o.Order_ID = ? AND o.IsDeleted = 0
+        """, (order_id,))
+        order = cursor.fetchone()
+        return order, None
+    except Exception as e:
+        return None, str(e)
+    finally:
+        conn.close()
+
 def calculateOrderTotals(order_id):
     try:
         conn = getDbConnection()
@@ -207,6 +207,7 @@ def calculateOrderTotals(order_id):
         return None, None, None, str(e)
     finally:
         conn.close()
+
 def getShopkeepers():
     """Fetch all active shopkeepers with their IDs for the combo box."""
     try:
@@ -251,7 +252,6 @@ def getProducts():
         return None, str(e)
     finally:
         conn.close()
-
 
 def getProductPrice(sku):
     """Fetch product price per item and available quantity based on SKU."""
@@ -314,6 +314,7 @@ def getOrderItemById(order_item_id):
         return None
     finally:
         conn.close()
+
 def removeOrderItem(order_item_id):
     """Marks an order item as deleted and updates order total."""
     try:

@@ -97,7 +97,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.show_message_box("Critical Error", error_message)
 
 # ------------------------------------------------------ ORDER FUNCTIONS ------------------------------------------------------
-
     def createOrder(self):
         """Handles order creation when the button is clicked."""
         shopkeeper_id = self.ui.cmbxOShopkeeper.currentData()
@@ -124,7 +123,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             QMessageBox.information(self, "Success", message)
         else:
             QMessageBox.critical(self, "Error", message)
-
 
     def addItemToOrder(self):
         """Adds an item to the current order and updates discount & total."""
@@ -212,8 +210,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         # Store current order_item_id for update action
         self.current_order_item_id = order_item_id
 
-    
-
     def updateBill(self):
         """Calculates bill amount when quantity changes."""
         sku = self.ui.cmbxOProduct.currentData()
@@ -284,6 +280,102 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.orderTable.setCellWidget(rowIndex, 7, editButton)  # Adjust column index based on your table
         self.ui.orderTable.setCellWidget(rowIndex, 8, deleteButton)
         self.ui.orderTable.setCellWidget(rowIndex, 9, viewButton)
+
+    
+    def viewOrder(self, orderID):
+        """Handles the view order button click and displays order details."""
+        try:
+            order, error = orderDL.getOrderById(orderID)
+            if error:
+                QMessageBox.critical(self, "Error", error)
+                return
+            if not order:
+                QMessageBox.critical(self, "Error", "Order not found!")
+                return
+
+            order_id, order_info, shopkeeper_name, salesman_name, order_date, total_amount, discount_amount, grand_total = order
+
+            details = f"""
+            <html>
+            <body style="font-size:12pt;">
+                <table border="0" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 200%;">
+                    <tr>
+                        <th align="left">Field</th>
+                        <th align="left">Value</th>
+                    </tr>
+                    <tr>
+                        <td><b>Order ID</b></td>
+                        <td>{order_id}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Shopkeeper</b></td>
+                        <td>{shopkeeper_name}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Salesman</b></td>
+                        <td>{salesman_name}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Order Info</b></td>
+                        <td>{order_info}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Order Date</b></td>
+                        <td>{order_date}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Total Amount</b></td>
+                        <td>{total_amount:.2f}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Discount Amount</b></td>
+                        <td>{discount_amount:.2f}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Grand Total</b></td>
+                        <td>{grand_total:.2f}</td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """
+
+            QMessageBox.information(self, "Order Details", details)
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Unexpected error while viewing order: {e}")
+
+    def editOrder(self, orderID):
+        """Handles the edit order button click by filling order details for the selected order."""
+        try:
+            self.current_order_id = orderID
+            order, error = orderDL.getOrderById(orderID)
+            if error:
+                QMessageBox.critical(self, "Error", error)
+                return
+            if not order:
+                QMessageBox.critical(self, "Error", "Order not found!")
+                return
+
+            order_id, order_info, shopkeeper_name, salesman_name, order_date, total_amount, discount_amount, grand_total = order
+
+            # Set values in the UI fields
+            self.ui.cmbxOShopkeeper.setCurrentIndex(self.ui.cmbxOShopkeeper.findData(shopkeeper_name))
+            self.ui.cmbxOSaleman.setCurrentIndex(self.ui.cmbxOSaleman.findData(salesman_name))
+            self.ui.txtOrderInfo.setText(order_info)
+            self.ui.numDiscount.setValue(discount_amount)
+
+            # Enable order item addition
+            self.ui.cmbxOProduct.setEnabled(True)
+            self.ui.numOQuantity.setEnabled(True)
+            self.ui.btnAddItem.setEnabled(True)
+            self.ui.btnFinishOrder.setEnabled(True)
+
+            self.fillOrderDetailTable()
+            self.updateOrderSummary()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Could not load order details: {str(e)}")
 
     def deleteOrder(self, orderID):
         """Handles the delete order button click."""
