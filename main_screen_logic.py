@@ -19,12 +19,15 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QPushButton, QMessageBox, QMainWindow
+from PyQt5.QtWidgets import QApplication, QPushButton, QMessageBox, QMainWindow,QTableWidgetItem
 import os
 import sys
 import os
 
-from BL import productManager, shopkeeperManager
+from BL import productManager, shopkeeperManager, orderManager 
+from DL import orderDL
+
+
 
 
 from ui_main import Ui_MainWindow  # Adjust based on your generated class name
@@ -70,6 +73,16 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.btnReportCampaign.clicked.connect(self.show_report_campaign_menu)
             self.btnDashboard.clicked.connect(self.show_dashboard_menu)
 
+            # --------------------- ORDER PAGE BUTTONS ---------------------
+            self.ui.btnCreateOrder.clicked.connect(self.createOrder)
+            self.ui.btnAddItem.clicked.connect(self.addItemToOrder)
+            self.ui.btnFinishOrder.clicked.connect(self.finishOrder)
+            self.fillOrderTable()
+            self.fillOrderComboboxes()
+            self.ui.cmbxOProduct.currentIndexChanged.connect(self.updateBill)
+            self.ui.numOQuantity.valueChanged.connect(self.updateBill)
+
+
             # --------------------- SHOPKEEPER PAGE BUTTONS ---------------------
             self.ui.btnAddShopkeeper.clicked.connect(self.onAddShopkeeperClick)
             self.fillShopkeeperTable()
@@ -82,6 +95,235 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             error_message = f"Error loading UI: {str(e)}\n\nTraceback:\n{traceback.format_exc()}"
             print(error_message)  # Print to console for debugging
             self.show_message_box("Critical Error", error_message)
+
+# ------------------------------------------------------ ORDER FUNCTIONS ------------------------------------------------------
+
+    def createOrder(self):
+        """Handles order creation when the button is clicked."""
+        shopkeeper_id = self.ui.cmbxOShopkeeper.currentData()
+        salesman_id = self.ui.cmbxOSaleman.currentData()
+        order_info = self.ui.txtOrderInfo.text()  # Ensure this field is optional if not needed
+        discount = self.ui.numDiscount.value()
+
+        success, message, order_id = orderManager.addOrder(shopkeeper_id, salesman_id, order_info, discount)
+        if success:
+            # Disable order-related fields
+            self.ui.cmbxOShopkeeper.setDisabled(True)
+            self.ui.cmbxOSaleman.setDisabled(True)
+            self.ui.numDiscount.setDisabled(True)
+            self.ui.txtOrderInfo.setDisabled(True)
+            self.ui.btnCreateOrder.setDisabled(True)
+
+            # Enable order item addition
+            self.ui.cmbxOProduct.setEnabled(True)
+            self.ui.numOQuantity.setEnabled(True)
+            self.ui.btnAddItem.setEnabled(True)
+            self.ui.btnFinishOrder.setEnabled(True)
+
+            self.current_order_id = order_id  # Store order ID for adding items
+            QMessageBox.information(self, "Success", message)
+        else:
+            QMessageBox.critical(self, "Error", message)
+
+
+    def addItemToOrder(self):
+        """Adds an item to the current order and updates discount & total."""
+        if not hasattr(self, 'current_order_id'):
+            QMessageBox.warning(self, "Warning", "Please create an order first.")
+            return
+        
+        product_sku = self.ui.cmbxOProduct.currentData()
+        quantity = self.ui.numOQuantity.value()
+        calculated_price = self.ui.txtOBill.text()  # Retrieve correct value
+
+        # Add order item
+        success, message = orderManager.addOrderItem(self.current_order_id, product_sku, quantity, calculated_price)
+        if success:
+            self.updateOrderSummary()
+            QMessageBox.information(self, "Success", message)
+        else:
+            QMessageBox.critical(self, "Error", message)
+    
+    def fillOrderDetailTable(self):
+        """Fetches order items and fills the order details table."""
+        if not hasattr(self, 'current_order_id'):
+            return  # No order created yet
+
+        self.ui.orderDetailTable.setRowCount(0)  # Clear table
+        order_id = self.current_order_id
+        items = orderDL.getOrderItems(order_id)  # Fetch order items
+
+        for row_index, (order_item_id, product_name, quantity, bill) in enumerate(items):
+            self.ui.orderDetailTable.insertRow(row_index)
+
+            # Product Name
+            self.ui.orderDetailTable.setItem(row_index, 0, QTableWidgetItem(str(product_name)))
+
+            # Quantity
+            self.ui.orderDetailTable.setItem(row_index, 1, QTableWidgetItem(str(quantity)))
+
+            # Bill (Formatted)
+            self.ui.orderDetailTable.setItem(row_index, 2, QTableWidgetItem(f"{bill:.2f}"))
+
+            # Edit Button
+            btn_edit = QPushButton("Edit")
+            btn_edit.clicked.connect(lambda _, item_id=order_item_id: self.editOrderItem(item_id))
+            self.ui.orderDetailTable.setCellWidget(row_index, 3, btn_edit)
+
+            # Delete Button
+            btn_delete = QPushButton("Delete")
+            btn_delete.clicked.connect(lambda _, item_id=order_item_id: self.deleteOrderItem(item_id))
+            self.ui.orderDetailTable.setCellWidget(row_index, 4, btn_delete)
+
+    def deleteOrderItem(self, order_item_id):
+        """Deletes an item from the order and updates the table."""
+        confirm = QMessageBox.question(self, "Delete Item", "Are you sure you want to delete this item?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if confirm == QMessageBox.No:
+            return
+
+        success, message = orderDL.removeOrderItem(order_item_id)
+        if success:
+            QMessageBox.information(self, "Success", "Item deleted successfully!")
+            self.fillOrderDetailTable()  # Refresh the table
+        else:
+            QMessageBox.critical(self, "Error", message)
+
+    def editOrderItem(self, order_item_id):
+        """Fills the input fields with order item details for editing."""
+        item = orderDL.getOrderItemById(order_item_id)
+        if not item:
+            QMessageBox.critical(self, "Error", "Item not found!")
+            return
+
+        product_sku, quantity, bill = item
+
+        # Set values in the UI fields
+        self.ui.cmbxOProduct.setCurrentText(product_sku)
+        self.ui.numOQuantity.setValue(quantity)
+        self.ui.txtOBill.setText(f"{bill:.2f}")
+
+        # Store current order_item_id for update action
+        self.current_order_item_id = order_item_id
+
+    
+
+    def updateBill(self):
+        """Calculates bill amount when quantity changes."""
+        sku = self.ui.cmbxOProduct.currentData()
+        quantity = self.ui.numOQuantity.value()
+
+        total_price = orderDL.getProductPrice(sku) * quantity
+        # print("Total Price update bill function: " , str(total_price))
+
+        if sku:
+            price = orderDL.getProductPrice(sku)
+            if price is not None:
+                self.ui.txtOBill.setText(str(total_price))
+            else:
+                self.ui.txtOBill.setText("0")
+
+    def updateOrderSummary(self):
+        """Updates the discount and grand total labels based on added items."""
+        discount, grand_total = orderDL.calculateOrderTotals(self.current_order_id)
+        self.ui.lblDiscount.setText(f"{discount:.2f}")
+        self.ui.lblGrandTotal.setText(f"{grand_total:.2f}")
+
+    def finishOrder(self):
+        """Finalizes the order, saves changes, and refreshes the order table."""
+        success, message = orderManager.finalizeOrder(self.current_order_id)
+        if success:
+            self.fillOrderTable()
+            self.fillOrderDetailTable()
+            self.resetOrderForm()
+            QMessageBox.information(self, "Success", message)
+        else:
+            QMessageBox.critical(self, "Error", message)
+
+    def fillOrderTable(self):
+        """Fetches and displays all orders in the order table."""
+        orders, error = orderManager.getOrders()
+        if error:
+            QMessageBox.critical(self, "Error", error)
+            return
+        
+        self.ui.orderTable.setRowCount(0)
+        self.ui.orderTable.setColumnCount(10)
+        self.ui.orderTable.setHorizontalHeaderLabels([
+            "Order ID", "Shopkeeper", "Salesman", "Date", "Total Amount", "Discount", "Grand Total", "Edit", "Delete", "View"
+        ])
+        
+        for rowIndex, rowData in enumerate(orders):
+            self.ui.orderTable.insertRow(rowIndex)
+            for colIndex, value in enumerate(rowData[:7]):  # First 7 columns are data
+                item = QTableWidgetItem(str(value) if value is not None else "N/A")
+                self.ui.orderTable.setItem(rowIndex, colIndex, item)
+            
+            self.addOrderTableButtons(rowIndex, rowData[0])
+    
+    def addOrderTableButtons(self, rowIndex, orderID):
+        """Adds Edit, Delete, and View buttons to the orderTable for a specific order."""
+        editButton = QPushButton("Edit")
+        deleteButton = QPushButton("Delete")
+        viewButton = QPushButton("View")
+
+        editButton.clicked.connect(lambda: self.editOrder(orderID))
+        deleteButton.clicked.connect(lambda: self.deleteOrder(orderID))
+        viewButton.clicked.connect(lambda: self.viewOrder(orderID))
+
+        self.ui.orderTable.setCellWidget(rowIndex, 7, editButton)  # Adjust column index based on your table
+        self.ui.orderTable.setCellWidget(rowIndex, 8, deleteButton)
+        self.ui.orderTable.setCellWidget(rowIndex, 9, viewButton)
+
+    def deleteOrder(self, orderID):
+        """Handles the delete order button click."""
+        confirm = QMessageBox.question(self, "Delete Order", 
+                                    f"Are you sure you want to delete Order ID: {orderID}?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        
+        if confirm == QMessageBox.Yes:
+            success, error = orderManager.deleteOrder(orderID)
+            if success:
+                QMessageBox.information(self, "Success", "Order deleted successfully!")
+                self.fillOrderTable()  # Refresh table after deletion
+            else:
+                QMessageBox.critical(self, "Error", error)
+
+    def fillOrderComboboxes(self):
+        """Fills shopkeeper, salesman, and product combo boxes with IDs and names."""
+        self.ui.cmbxOShopkeeper.clear()
+        self.ui.cmbxOSaleman.clear()
+        self.ui.cmbxOProduct.clear()
+
+        shopkeepers, _ = orderDL.getShopkeepers()
+        if shopkeepers:
+            for sk in shopkeepers:
+                self.ui.cmbxOShopkeeper.addItem(sk[1], sk[0])  # Name as display, ID as data
+
+        salesmen, _ = orderDL.getSalesmen()
+        if salesmen:
+            for sm in salesmen:
+                self.ui.cmbxOSaleman.addItem(sm[1], sm[0])
+
+        products, _ = orderDL.getProducts()
+        if products:
+            for p in products:
+                self.ui.cmbxOProduct.addItem(p[1], p[0])
+
+
+
+    def resetOrderForm(self):
+        """Resets order fields for new entry."""
+        self.ui.cmbxOShopkeeper.setEnabled(True)
+        self.ui.cmbxOSaleman.setEnabled(True)
+        self.ui.numDiscount.setEnabled(True)
+        self.ui.txtOrderInfo.setEnabled(True)
+        self.ui.txtOrderInfo.clear()
+        self.ui.numDiscount.setValue(0)
+        self.ui.lblDiscount.setText("0.00")
+        self.ui.lblGrandTotal.setText("0.00")
+        self.current_order_id = None
+
 
 # ------------------------------------------------------ SHOPKEEPER FUNCTION ------------------------------------------------------
     def onAddShopkeeperClick(self):
@@ -148,9 +390,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             shopkeeperID = rowData[0]  # Ensure correct ID is fetched
             self.addShopkeeperTableButtons(rowIndex, shopkeeperID)
 
-
-
-
     def onEditShopkeeper(self, rowIndex):
         """Handles the edit shopkeeper button click by filling form fields with selected shopkeeper data."""
         try:
@@ -172,7 +411,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         except Exception as e:
             QMessageBox.critical(None, "Error", f"Could not load shopkeeper details: {str(e)}")
 
-
     def onDeleteShopkeeper(self, shopkeeperID):
         """Handles the delete shopkeeper button click."""
         confirm = QMessageBox.question(None, "Delete Shopkeeper", 
@@ -186,7 +424,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
                 self.fillShopkeeperTable()  # Refresh table after deletion
             else:
                 QMessageBox.critical(None, "Error", error)
-
 
     def onViewShopkeeper(self, shopkeeperID=None):
         """Handles the view shopkeeper button click and displays shopkeeper details from the selected row."""
@@ -337,8 +574,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         except Exception as e:
             QMessageBox.critical(None, "Error", f"Could not load product details: {str(e)}")
 
-
-
     def onDeleteProduct(self, sku):
         """Handles the delete product button click."""
         confirm = QMessageBox.question(None, "Delete Product", f"Are you sure you want to delete SKU: {sku}?",
@@ -450,7 +685,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         self.ui.btnAddProduct.setText("Add Product")  # Reset button text
         self.currentEditingSKU = None  # Reset editing state
-
 
 
 # --------------------- UI FUNCTIONS ---------------------

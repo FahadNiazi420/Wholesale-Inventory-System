@@ -2977,7 +2977,7 @@ color: rgb(255, 255, 255);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>385</width>
+                                 <width>222</width>
                                  <height>222</height>
                                 </rect>
                                </property>
@@ -4775,7 +4775,7 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                </property>
                                <layout class="QHBoxLayout" name="horizontalLayout_20">
                                 <item>
-                                 <widget class="QFrame" name="frame_31">
+                                 <widget class="QFrame" name="orderFrame">
                                   <property name="sizePolicy">
                                    <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
                                     <horstretch>0</horstretch>
@@ -4810,7 +4810,7 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                       <string notr="true"/>
                                      </property>
                                      <property name="text">
-                                      <string>OrderInfo :  : </string>
+                                      <string>OrderInfo :   </string>
                                      </property>
                                     </widget>
                                    </item>
@@ -4851,7 +4851,7 @@ color: rgb(255, 255, 255);
                                     </widget>
                                    </item>
                                    <item row="6" column="1">
-                                    <widget class="QPushButton" name="btnAddShopkeeper_5">
+                                    <widget class="QPushButton" name="btnCreateOrder">
                                      <property name="styleSheet">
                                       <string notr="true">QPushButton
 {
@@ -5032,7 +5032,7 @@ color: rgb(255, 255, 255);</string>
                                     </widget>
                                    </item>
                                    <item row="3" column="1">
-                                    <widget class="QSpinBox" name="spinBox">
+                                    <widget class="QSpinBox" name="numDiscount">
                                      <property name="minimumSize">
                                       <size>
                                        <width>0</width>
@@ -5057,7 +5057,7 @@ color: rgb(255, 255, 255);</string>
                                  </widget>
                                 </item>
                                 <item>
-                                 <widget class="QFrame" name="frame_32">
+                                 <widget class="QFrame" name="orderDetailFrame">
                                   <property name="sizePolicy">
                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                     <horstretch>0</horstretch>
@@ -5165,48 +5165,6 @@ color: rgb(255, 255, 255);</string>
                                      </property>
                                     </widget>
                                    </item>
-                                   <item row="1" column="1">
-                                    <widget class="QLineEdit" name="txtOQuantity">
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>0</width>
-                                       <height>28</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>12</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);
-padding: 6px 6px</string>
-                                     </property>
-                                     <property name="inputMask">
-                                      <string>00000000000000000000</string>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="maxLength">
-                                      <number>20</number>
-                                     </property>
-                                     <property name="placeholderText">
-                                      <string>Quantity</string>
-                                     </property>
-                                    </widget>
-                                   </item>
                                    <item row="2" column="0">
                                     <widget class="QLabel" name="label_56">
                                      <property name="font">
@@ -5220,48 +5178,6 @@ padding: 6px 6px</string>
                                      </property>
                                      <property name="text">
                                       <string>Bill : </string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="2" column="1">
-                                    <widget class="QLineEdit" name="txtAmountPaid_5">
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>0</width>
-                                       <height>28</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>12</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);
-padding: 6px 6px</string>
-                                     </property>
-                                     <property name="inputMask">
-                                      <string>00000000000000000000</string>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="maxLength">
-                                      <number>20</number>
-                                     </property>
-                                     <property name="placeholderText">
-                                      <string>Price</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -5282,7 +5198,7 @@ padding: 6px 6px</string>
                                     </spacer>
                                    </item>
                                    <item row="5" column="1">
-                                    <widget class="QPushButton" name="btnAddShopkeeper_4">
+                                    <widget class="QPushButton" name="btnAddItem">
                                      <property name="styleSheet">
                                       <string notr="true">QPushButton
 {
@@ -5317,6 +5233,31 @@ background-color:#1159A8;
                                       </size>
                                      </property>
                                     </spacer>
+                                   </item>
+                                   <item row="1" column="1">
+                                    <widget class="QSpinBox" name="numOQuantity">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>0</width>
+                                       <height>40</height>
+                                      </size>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);
+font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item row="2" column="1">
+                                    <widget class="QLabel" name="txtOBill">
+                                     <property name="styleSheet">
+                                      <string notr="true">font: 13pt &quot;MS Shell Dlg 2&quot;;</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>0</string>
+                                     </property>
+                                    </widget>
                                    </item>
                                   </layout>
                                  </widget>
@@ -5380,6 +5321,10 @@ background-color:#1159A8;
                                           <horstretch>0</horstretch>
                                           <verstretch>0</verstretch>
                                          </sizepolicy>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
                                         </property>
                                         <row>
                                          <property name="text">
@@ -5477,7 +5422,7 @@ background-color:#1159A8;
                                          <string notr="true">font: 13pt &quot;Calibri&quot;;</string>
                                         </property>
                                         <property name="text">
-                                         <string>100000</string>
+                                         <string>0</string>
                                         </property>
                                        </widget>
                                       </item>
@@ -5540,7 +5485,7 @@ background-color:#1159A8;
                                          <string notr="true">font: 13pt &quot;Calibri&quot;;</string>
                                         </property>
                                         <property name="text">
-                                         <string>100000</string>
+                                         <string>0</string>
                                         </property>
                                        </widget>
                                       </item>
@@ -5585,7 +5530,7 @@ background-color:#1159A8;
                                        </spacer>
                                       </item>
                                       <item>
-                                       <widget class="QPushButton" name="pushButton_2">
+                                       <widget class="QPushButton" name="btnFinishOrder">
                                         <property name="minimumSize">
                                          <size>
                                           <width>250</width>
