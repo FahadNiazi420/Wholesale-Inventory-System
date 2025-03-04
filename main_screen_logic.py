@@ -82,7 +82,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.ui.cmbxOProduct.currentIndexChanged.connect(self.updateBill)
             self.ui.numOQuantity.valueChanged.connect(self.updateBill)
 
-
             # --------------------- SHOPKEEPER PAGE BUTTONS ---------------------
             self.ui.btnAddShopkeeper.clicked.connect(self.onAddShopkeeperClick)
             self.fillShopkeeperTable()
@@ -104,7 +103,12 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         order_info = self.ui.txtOrderInfo.text()  # Ensure this field is optional if not needed
         discount = self.ui.numDiscount.value()
 
-        success, message, order_id = orderManager.addOrder(shopkeeper_id, salesman_id, order_info, discount)
+        if self.ui.btnCreateOrder.text() == "Edit Order":
+            success, message = orderDL.updateOrder(self.current_order_id, shopkeeper_id, salesman_id, order_info, discount)
+        else:
+            success, message, order_id = orderManager.addOrder(shopkeeper_id, salesman_id, order_info, discount)
+            self.current_order_id = order_id  # Store order ID for adding items
+
         if success:
             # Disable order-related fields
             self.ui.cmbxOShopkeeper.setDisabled(True)
@@ -119,7 +123,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.ui.btnAddItem.setEnabled(True)
             self.ui.btnFinishOrder.setEnabled(True)
 
-            self.current_order_id = order_id  # Store order ID for adding items
             QMessageBox.information(self, "Success", message)
         else:
             QMessageBox.critical(self, "Error", message)
@@ -151,8 +154,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.orderDetailTable.setRowCount(0)  # Clear table
         order_id = self.current_order_id
         items = orderDL.getOrderItems(order_id)  # Fetch order items
-        # print("Current Order ID in fill order detail: ", self.current_order_id)
-        # print("Items in fill order detail: ", items)
         if not items:
             return  # No items to display
 
@@ -203,7 +204,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         product_sku, quantity, bill = item
 
         # Set values in the UI fields
-        self.ui.cmbxOProduct.setCurrentText(product_sku)
+        self.ui.cmbxOProduct.setCurrentIndex(self.ui.cmbxOProduct.findData(product_sku))
         self.ui.numOQuantity.setValue(int(quantity))
         self.ui.txtOBill.setText(f"{bill:.2f}")
 
@@ -216,7 +217,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         quantity = self.ui.numOQuantity.value()
 
         total_price = orderDL.getProductPrice(sku) * quantity
-        # print("Total Price update bill function: " , str(total_price))
 
         if sku:
             price = orderDL.getProductPrice(sku)
@@ -227,7 +227,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
     def updateOrderSummary(self):
         """Updates the discount and grand total labels based on added items."""
-        total_amount,discount, grand_total = orderDL.calculateOrderTotals(self.current_order_id)
+        total_amount, discount, grand_total = orderDL.calculateOrderTotals(self.current_order_id)
         self.ui.lblTotal.setText(f"{total_amount:.2f}")
         self.ui.lblDiscount.setText(f"{discount:.2f}")
         self.ui.lblGrandTotal.setText(f"{grand_total:.2f}")
@@ -294,6 +294,11 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
             order_id, order_info, shopkeeper_name, salesman_name, order_date, total_amount, discount_amount, grand_total = order
 
+            order_date = order_date if order_date is not None else "N/A"
+            total_amount = total_amount if total_amount is not None else 0.0
+            discount_amount = discount_amount if discount_amount is not None else 0.0
+            grand_total = grand_total if grand_total is not None else 0.0
+
             details = f"""
             <html>
             <body style="font-size:12pt;">
@@ -307,16 +312,16 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
                         <td>{order_id}</td>
                     </tr>
                     <tr>
+                        <td><b>Order Info</b></td>
+                        <td>{order_info}</td>
+                    </tr>
+                    <tr>
                         <td><b>Shopkeeper</b></td>
                         <td>{shopkeeper_name}</td>
                     </tr>
                     <tr>
                         <td><b>Salesman</b></td>
                         <td>{salesman_name}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Order Info</b></td>
-                        <td>{order_info}</td>
                     </tr>
                     <tr>
                         <td><b>Order Date</b></td>
@@ -359,8 +364,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             order_id, order_info, shopkeeper_name, salesman_name, order_date, total_amount, discount_amount, grand_total = order
 
             # Set values in the UI fields
-            self.ui.cmbxOShopkeeper.setCurrentIndex(self.ui.cmbxOShopkeeper.findData(shopkeeper_name))
-            self.ui.cmbxOSaleman.setCurrentIndex(self.ui.cmbxOSaleman.findData(salesman_name))
+            self.ui.cmbxOShopkeeper.setCurrentIndex(self.ui.cmbxOShopkeeper.findText(shopkeeper_name))
+            self.ui.cmbxOSaleman.setCurrentIndex(self.ui.cmbxOSaleman.findText(salesman_name))
             self.ui.txtOrderInfo.setText(order_info)
             self.ui.numDiscount.setValue(int(discount_amount))
 
@@ -369,6 +374,10 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.ui.numOQuantity.setEnabled(True)
             self.ui.btnAddItem.setEnabled(True)
             self.ui.btnFinishOrder.setEnabled(True)
+
+            # Change button text to "Edit Order"
+            self.ui.btnCreateOrder.setText("Edit Order")
+            self.ui.btnCreateOrder.setEnabled(True)
 
             self.fillOrderDetailTable()
             self.updateOrderSummary()
@@ -415,19 +424,26 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
                 display_text = f"{p[0]} - {p[1]} - {p[2]}"  # SKU - Name - Size
                 self.ui.cmbxOProduct.addItem(display_text, p[0])  # Display full text, store SKU as data
 
-
     def resetOrderForm(self):
-        """Resets order fields for new entry."""
+        """Resets order fields for new entry and clears the order detail table."""
         self.ui.cmbxOShopkeeper.setEnabled(True)
         self.ui.cmbxOSaleman.setEnabled(True)
         self.ui.numDiscount.setEnabled(True)
         self.ui.txtOrderInfo.setEnabled(True)
+
+        # Reset input fields
         self.ui.txtOrderInfo.clear()
         self.ui.numDiscount.setValue(0)
         self.ui.lblDiscount.setText("0.00")
         self.ui.lblGrandTotal.setText("0.00")
         self.ui.lblTotal.setText("0.00")
+
+        # Clear the order details table
+        self.ui.orderDetailTable.setRowCount(0)  
+
+        # Reset order state
         self.current_order_id = None
+        self.ui.btnCreateOrder.setText("Create Order")
 
 
 # ------------------------------------------------------ SHOPKEEPER FUNCTION ------------------------------------------------------

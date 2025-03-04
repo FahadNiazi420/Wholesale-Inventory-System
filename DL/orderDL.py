@@ -55,15 +55,15 @@ def addOrderItem(order_id, product_sku, quantity, price):
         conn.close()
 
 
-def updateOrder(order_id, shopkeeper_id, salesman_id, discount):
+def updateOrder(order_id, shopkeeper_id, salesman_id, order_info, discount):
     try:
         conn = getDbConnection()
         cursor = conn.cursor()
         cursor.execute("""
             UPDATE Orders
-            SET Shopkeeper_ID = ?, Salesman_ID = ?
+            SET Shopkeeper_ID = ?, Salesman_ID = ?,Order_Info = ?
             WHERE Order_ID = ?
-        """, (shopkeeper_id, salesman_id, order_id))
+        """, (shopkeeper_id, salesman_id,order_info, order_id))
 
         cursor.execute("""
             UPDATE Discounts
