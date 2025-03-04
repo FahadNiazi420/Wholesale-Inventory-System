@@ -1,4 +1,5 @@
 from datetime import datetime
+from BL import backupManager
 from DL.database import getDbConnection
 
 def addOrder(shopkeeper_id, salesman_id, order_info, discount):
@@ -70,7 +71,7 @@ def updateOrder(order_id, shopkeeper_id, salesman_id, order_info, discount):
             SET Discount_Amount = ?, Applied_By = ?
             WHERE Order_ID = ?
         """, (discount, "System", order_id))
-
+        backupManager.backupDatabaseTable("Discounts")  # Backup Discounts table
         conn.commit()
         return True, "Order updated successfully!"
     except Exception as e:
