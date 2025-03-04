@@ -81,6 +81,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.fillOrderComboboxes()
             self.ui.cmbxOProduct.currentIndexChanged.connect(self.updateBill)
             self.ui.numOQuantity.valueChanged.connect(self.updateBill)
+            self.ui.numDiscount.valueChanged.connect(self.updateOrderSummaryonDiscount)
 
             # --------------------- SHOPKEEPER PAGE BUTTONS ---------------------
             self.ui.btnAddShopkeeper.clicked.connect(self.onAddShopkeeperClick)
@@ -226,6 +227,17 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
                 self.ui.txtOBill.setText(str(total_price))
             else:
                 self.ui.txtOBill.setText("0")
+
+    def updateOrderSummaryonDiscount(self):
+        """Updates the discount and grand total labels based on the discount percentage."""
+        total_amount, _, grand_total = orderDL.calculateOrderTotals(self.current_order_id)
+        discount_percentage = self.ui.numDiscount.value()
+        discount_amount = (discount_percentage / 100) * total_amount
+        grand_total = total_amount - discount_amount
+
+        self.ui.lblTotal.setText(f"{total_amount:.2f}")
+        self.ui.lblDiscount.setText(f"{discount_amount:.2f}")
+        self.ui.lblGrandTotal.setText(f"{grand_total:.2f}")
 
     def updateOrderSummary(self):
         """Updates the discount and grand total labels based on added items."""
