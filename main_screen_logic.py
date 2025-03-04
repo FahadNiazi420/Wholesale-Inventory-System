@@ -178,7 +178,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             btn_delete = QPushButton("Delete")
             btn_delete.clicked.connect(lambda _, item_id=order_item_id: self.deleteOrderItem(item_id))
             self.ui.orderDetailTable.setCellWidget(row_index, 4, btn_delete)
-
+        
     def deleteOrderItem(self, order_item_id):
         """Deletes an item from the order and updates the table."""
         confirm = QMessageBox.question(self, "Delete Item", "Are you sure you want to delete this item?",
@@ -206,7 +206,9 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         # Set values in the UI fields
         self.ui.cmbxOProduct.setCurrentIndex(self.ui.cmbxOProduct.findData(product_sku))
         self.ui.numOQuantity.setValue(int(quantity))
-        self.ui.txtOBill.setText(f"{bill:.2f}")
+        # dividing bill by quantity because getOrderById is sending quan*price calcualted as bill
+        self.ui.txtOBill.setText(f"{bill/quantity:.2f}")
+        # print("editorder:",product_sku,quantity,bill)
 
         # Store current order_item_id for update action
         self.current_order_item_id = order_item_id
@@ -363,11 +365,14 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
             order_id, order_info, shopkeeper_name, salesman_name, order_date, total_amount, discount_amount, grand_total = order
 
+            # Calculate discount percentage
+            discount_percentage = (discount_amount / total_amount) * 100 if total_amount > 0 else 0
+
             # Set values in the UI fields
             self.ui.cmbxOShopkeeper.setCurrentIndex(self.ui.cmbxOShopkeeper.findText(shopkeeper_name))
             self.ui.cmbxOSaleman.setCurrentIndex(self.ui.cmbxOSaleman.findText(salesman_name))
             self.ui.txtOrderInfo.setText(order_info)
-            self.ui.numDiscount.setValue(int(discount_amount))
+            self.ui.numDiscount.setValue(int(discount_percentage))  # Set discount as percentage
 
             # Enable order item addition
             self.ui.cmbxOProduct.setEnabled(True)
