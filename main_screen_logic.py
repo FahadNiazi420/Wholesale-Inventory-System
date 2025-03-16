@@ -535,6 +535,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         try:
             shopkeeperID = self.ui.shopkeeperTable.item(rowIndex, 0).text()  # Get ID from hidden column
             name = self.ui.shopkeeperTable.item(rowIndex, 1).text()
+            brand = self.ui.shopkeeperTable.item(rowIndex, 2).text()
             contact = self.ui.shopkeeperTable.item(rowIndex, 3).text()
 
             if not shopkeeperID:
@@ -543,6 +544,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
             self.editingShopkeeperID = shopkeeperID
             self.ui.txtShopkeeperName.setText(name)
+            self.ui.cmbxSpkBrand.setCurrentText(brand)
             self.ui.txtShopkeeperContact.setText(contact)
 
             # Change button text and store ID for tracking updates
