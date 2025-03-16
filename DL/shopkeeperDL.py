@@ -1,16 +1,16 @@
 import sqlite3
 from DL.database import getDbConnection
 
-def insertShopkeeper(name, contactInfo):
+def insertShopkeeper(name, contactInfo, brand):
     """Insert a new shopkeeper into the database and return success status and message."""
     try:
         conn = getDbConnection()
         cursor = conn.cursor()
 
         cursor.execute('''
-            INSERT INTO Shopkeepers (Name, Contact_Info)
-            VALUES (?, ?)
-        ''', (name, contactInfo))
+            INSERT INTO Shopkeepers (Name, Contact_Info, Brand)
+            VALUES (?, ?, ?)
+        ''', (name, contactInfo, brand))
 
         conn.commit()
         return True, "Shopkeeper added successfully."
@@ -21,6 +21,29 @@ def insertShopkeeper(name, contactInfo):
         return False, f"Database error occurred while adding the shopkeeper: {e}"
     finally:
         conn.close()
+
+def updateShopkeeper(shopkeeperId, name, contactInfo, brand):
+    """Updates an existing shopkeeper in the database."""
+    try:
+        conn = getDbConnection()
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            UPDATE Shopkeepers
+            SET Name = ?, Contact_Info = ?, Brand = ?
+            WHERE ID = ?
+        ''', (name, contactInfo, brand, shopkeeperId))
+
+        if cursor.rowcount == 0:
+            return False, "Shopkeeper not found."
+
+        conn.commit()
+        return True, "Shopkeeper updated successfully."
+    except sqlite3.Error as e:
+        return False, f"Database error: {e}"
+    finally:
+        conn.close()
+
 
 def fetchShopkeepers():
     """Fetch all shopkeeper data from the database."""
@@ -71,24 +94,24 @@ def deleteShopkeeper(shopkeeperId):
     except Exception as e:
         return False, f"Unexpected Error: {e}"
 
-def updateShopkeeper(shopkeeperId, name, contactInfo):
-    """Updates an existing shopkeeper in the database."""
-    try:
-        conn = getDbConnection()
-        cursor = conn.cursor()
+# def updateShopkeeper(shopkeeperId, name, contactInfo):
+#     """Updates an existing shopkeeper in the database."""
+#     try:
+#         conn = getDbConnection()
+#         cursor = conn.cursor()
 
-        cursor.execute('''
-            UPDATE Shopkeepers
-            SET Name = ?, Contact_Info = ?
-            WHERE ID = ?
-        ''', (name, contactInfo, shopkeeperId))
+#         cursor.execute('''
+#             UPDATE Shopkeepers
+#             SET Name = ?, Contact_Info = ?
+#             WHERE ID = ?
+#         ''', (name, contactInfo, shopkeeperId))
 
-        if cursor.rowcount == 0:
-            return False, "Shopkeeper not found."
+#         if cursor.rowcount == 0:
+#             return False, "Shopkeeper not found."
 
-        conn.commit()
-        return True, "Shopkeeper updated successfully."
-    except sqlite3.Error as e:
-        return False, f"Database Error: {e}"
-    finally:
-        conn.close()
+#         conn.commit()
+#         return True, "Shopkeeper updated successfully."
+#     except sqlite3.Error as e:
+#         return False, f"Database Error: {e}"
+#     finally:
+#         conn.close()

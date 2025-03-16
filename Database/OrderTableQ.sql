@@ -1,5 +1,5 @@
 SELECT 
-    O.Order_ID, 
+    O.Order_ID,
     SK.Name AS Shopkeeper_Name, 
     SM.Name AS Salesman_Name, 
     O.Order_Date, 

@@ -2093,7 +2093,7 @@ background-color:#1159A8;
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>4</number>
+                      <number>3</number>
                      </property>
                      <widget class="QWidget" name="manageProducts">
                       <property name="acceptDrops">
@@ -2981,7 +2981,7 @@ color: rgb(255, 255, 255);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>222</width>
+                                 <width>385</width>
                                  <height>222</height>
                                 </rect>
                                </property>

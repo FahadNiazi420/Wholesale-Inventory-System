@@ -469,15 +469,16 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         try:
             name = self.ui.txtShopkeeperName.text().strip()
             contact = self.ui.txtShopkeeperContact.text().strip()
+            brand = self.ui.cmbxSpkBrand.currentText().strip()  # Get selected brand
 
-            if not name or not contact:
+            if not name or not contact or not brand:
                 QMessageBox.warning(None, "Input Error", "Please fill all fields correctly before proceeding.")
                 return
 
             if self.ui.btnAddShopkeeper.text() == "Edit Shopkeeper":
-                success, message = shopkeeperManager.updateShopkeeper(self.editingShopkeeperID, name, contact)
+                success, message = shopkeeperManager.updateShopkeeper(self.editingShopkeeperID, name, contact, brand)
             else:
-                success, message = shopkeeperManager.addShopkeeper(name, contact)
+                success, message = shopkeeperManager.addShopkeeper(name, contact, brand)
 
             if success:
                 QMessageBox.information(None, "Success", message)
@@ -492,6 +493,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         except Exception as e:
             QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
+
     def fillShopkeeperTable(self):
         """Fetches shopkeeper data and fills the shopkeeperTable widget with Edit, Delete, and View buttons."""
         shopkeepers, error = shopkeeperManager.getShopkeepers()
