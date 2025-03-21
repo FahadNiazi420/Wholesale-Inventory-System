@@ -18,14 +18,15 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 from PyQt5.QtGui import QColor
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDate, QDateTime
 from PyQt5.QtWidgets import QApplication, QPushButton, QMessageBox, QMainWindow,QTableWidgetItem
 import os
 import sys
 import os
+from datetime import datetime
 
 from BL import productManager, shopkeeperManager, orderManager 
-from DL import orderDL
+from DL import orderDL, paymentDL
 
 
 
@@ -73,12 +74,16 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.btnReportCampaign.clicked.connect(self.show_report_campaign_menu)
             self.btnDashboard.clicked.connect(self.show_dashboard_menu)
 
+            # --------------------- PAYMENT / KHATA PAGE BUTTON ---------------------
+            self.fillPaymentComboboxes()
+
             # --------------------- ORDER PAGE BUTTONS ---------------------
             self.ui.btnCreateOrder.clicked.connect(self.createOrder)
             self.ui.btnAddItem.clicked.connect(self.addItemToOrder)
             self.ui.btnFinishOrder.clicked.connect(self.finishOrder)
             self.fillOrderTable()
             self.fillOrderComboboxes()
+            self.current_order_id=0
             self.ui.cmbxOProduct.currentIndexChanged.connect(self.updateBill)
             self.ui.numOQuantity.valueChanged.connect(self.updateBill)
             self.ui.numDiscount.valueChanged.connect(self.updateOrderSummaryonDiscount)
@@ -95,6 +100,118 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             error_message = f"Error loading UI: {str(e)}\n\nTraceback:\n{traceback.format_exc()}"
             print(error_message)  # Print to console for debugging
             self.show_message_box("Critical Error", error_message)
+
+# ------------------------------------------------------ PAYMENT / KHATA ------------------------------------------------------
+    def fillPaymentComboboxes(self):
+        """Fills shopkeeper combobox and sets up dynamic updates for order and salesman."""
+        self.ui.cmbxPaySpk.clear()
+        self.ui.cmbxPayOrder.clear()
+        self.ui.cmbxPaySaleman.clear()
+
+        # Load Shopkeepers
+        shopkeepers, _ = paymentDL.getDistinctShopkeepersFromOrders()
+        if shopkeepers:
+            for sk in shopkeepers:
+                self.ui.cmbxPaySpk.addItem(sk[1], sk[0])  # Display Name, store ID
+
+        # Connect signal to load orders dynamically
+        self.ui.cmbxPaySpk.currentIndexChanged.connect(self.loadOrdersForSelectedShopkeeper)
+
+        # Auto-select first shopkeeper if available
+        if self.ui.cmbxPaySpk.count() > 0:
+            self.ui.cmbxPaySpk.setCurrentIndex(0)
+            self.loadOrdersForSelectedShopkeeper()
+
+
+    def loadOrdersForSelectedShopkeeper(self):
+        """Loads orders for the selected shopkeeper and updates related fields."""
+        self.ui.cmbxPayOrder.clear()
+        self.ui.cmbxPayBrand.clear()
+
+        shopkeeper_id = self.ui.cmbxPaySpk.currentData()
+        if not shopkeeper_id:
+            return
+
+        # Load Orders for the Selected Shopkeeper
+        orders, _ = paymentDL.getOrdersByShopkeeper(shopkeeper_id)
+        if orders:
+            for order in orders:
+                display_text = f"{order[1]} (ID: {order[0]})"
+                self.ui.cmbxPayOrder.addItem(display_text, order[0])
+
+            # Auto-select the first order
+            self.ui.cmbxPayOrder.setCurrentIndex(0)
+
+        # Load Shopkeeper Brand
+        brand, _ = paymentDL.getShopkeeperBrand(shopkeeper_id)
+        if brand:
+            self.ui.cmbxPayBrand.addItem(brand)
+
+        # Load Last Payment Submission Date
+        last_submission, _ = paymentDL.getLastSubmissionDate(shopkeeper_id)
+        self.ui.txtPayLastPayment.setText(last_submission if last_submission else "N/A")
+
+        # Load Total Paid and Total Due for Shopkeeper with Default Values
+        total_paid, total_due, _ = paymentDL.getShopkeeperTotalPaidAndDue(shopkeeper_id)
+        total_paid = total_paid if total_paid is not None else 0  # Ensure it's not None
+        total_due = total_due if total_due is not None else 0  # Ensure it's not None
+
+        self.ui.lblSpkPaid.setText(str(int(total_paid)))
+        self.ui.lblTotalDue.setText(str(int(total_due)))
+
+        # Ensure order updates are handled dynamically
+        try:
+            self.ui.cmbxPayOrder.currentIndexChanged.disconnect(self.loadSalesmanForSelectedOrder)
+        except TypeError:
+            pass  # Ignore if already disconnected
+
+        self.ui.cmbxPayOrder.currentIndexChanged.connect(self.loadSalesmanForSelectedOrder)
+
+        # Call function to fill salesman based on first selected order
+        self.loadSalesmanForSelectedOrder()
+
+        # Connect Payment Spinner Change Event for Dynamic Update
+        self.ui.numPaymentPaid.valueChanged.connect(self.updateRemainingAmount)
+
+
+    def loadSalesmanForSelectedOrder(self):
+        """Loads salesman details for the selected order and updates order total."""
+        self.ui.cmbxPaySaleman.clear()
+
+        order_id = self.ui.cmbxPayOrder.currentData()
+        if not order_id:
+            return
+
+        # Load Salesman
+        salesman, _ = paymentDL.getSalesmanByOrder(order_id)
+        if salesman:
+            self.ui.cmbxPaySaleman.addItem(salesman[1], salesman[0])  # Display Name, store ID
+            self.ui.cmbxPaySaleman.setCurrentIndex(0)  # Auto-select salesman
+
+        # Load Order Total
+        total_amount, _ = paymentDL.getOrderTotalAmount(order_id)
+        self.ui.lblOrderPaidbyDue.setText(str(int(total_amount)))
+        self.ui.numPaymentPaid.setMaximum(int(total_amount))  # Set max limit on spin box
+
+        # Call update function to handle remaining amount
+        self.updateRemainingAmount()
+
+
+    def updateRemainingAmount(self):
+        """Dynamically update remaining amount without DB calls."""
+        try:
+            total_due = int(self.ui.lblTotalDue.text())  # Get total due from label
+            amount_paying = int(self.ui.numPaymentPaid.value())  # Get current input
+            remaining_amount = total_due - amount_paying  # Calculate remaining
+            self.ui.lblRemaining.setText(str(remaining_amount))
+            self.ui.lblAmountPaid.setText(str(amount_paying))  # Update amount being paid
+        except ValueError:
+            self.ui.lblRemaining.setText("0")  # Handle conversion errors
+            self.ui.lblAmountPaid.setText("0")
+
+
+
+    
 
 # ------------------------------------------------------ ORDER FUNCTIONS ------------------------------------------------------
     def createOrder(self):
@@ -254,6 +371,12 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.fillOrderDetailTable()
             self.resetOrderForm()
             QMessageBox.information(self, "Success", message)
+
+            # Enable order item addition
+            self.ui.cmbxOProduct.setEnabled(False)
+            self.ui.numOQuantity.setEnabled(False)
+            self.ui.btnAddItem.setEnabled(False)
+            self.ui.btnFinishOrder.setEnabled(False)
         else:
             QMessageBox.critical(self, "Error", message)
 
@@ -422,24 +545,49 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.cmbxOSaleman.clear()
         self.ui.cmbxOProduct.clear()
 
-        # Fill Shopkeepers
+        # Fetch shopkeepers
         shopkeepers, _ = orderDL.getShopkeepers()
         if shopkeepers:
             for sk in shopkeepers:
-                self.ui.cmbxOShopkeeper.addItem(sk[1], sk[0])  # Name as display, ID as data
+                display_text = f"{sk[1]} ({sk[2]})"  # Name (Brand)
+                self.ui.cmbxOShopkeeper.addItem(display_text, sk[0])  # Store ID as data
 
-        # Fill Salesmen
+        # Fetch salesmen
         salesmen, _ = orderDL.getSalesmen()
         if salesmen:
             for sm in salesmen:
-                self.ui.cmbxOSaleman.addItem(sm[1], sm[0])  # Name as display, ID as data
+                self.ui.cmbxOSaleman.addItem(sm[1], sm[0])  # Store ID as data
 
-        # Fill Products with SKU - Name - Size format
-        products, _ = orderDL.getProducts()
-        if products:
-            for p in products:
-                display_text = f"{p[0]} - {p[1]} - {p[2]}"  # SKU - Name - Size
-                self.ui.cmbxOProduct.addItem(display_text, p[0])  # Display full text, store SKU as data
+        # Load products based on the first shopkeeper's brand (if exists)
+        if shopkeepers:
+            self.updateProductsByShopkeeper(shopkeepers[0][0])  # Pass first shopkeeper ID
+
+        # Connect shopkeeper selection change to reload products
+        self.ui.cmbxOShopkeeper.currentIndexChanged.connect(self.onShopkeeperChanged)
+
+    def onShopkeeperChanged(self):
+        """Updates product list when shopkeeper selection changes."""
+        index = self.ui.cmbxOShopkeeper.currentIndex()
+        if index != -1:
+            shopkeeper_id = self.ui.cmbxOShopkeeper.itemData(index)
+            self.updateProductsByShopkeeper(shopkeeper_id)
+
+    def updateProductsByShopkeeper(self, shopkeeper_id):
+        """Fetches and updates product combo box based on the selected shopkeeper's brand."""
+        shopkeepers, _ = orderDL.getShopkeepers()
+        selected_brand = None
+        for sk in shopkeepers:
+            if sk[0] == shopkeeper_id:
+                selected_brand = sk[2]  # Get brand
+                break
+
+        if selected_brand:
+            self.ui.cmbxOProduct.clear()
+            products, _ = orderDL.getProductsByBrand(selected_brand)
+            if products:
+                for p in products:
+                    display_text = f"{p[0]} - {p[1]} - {p[2]}"  # SKU - Name - Size
+                    self.ui.cmbxOProduct.addItem(display_text, p[0])  # Store SKU as data
 
     def resetOrderForm(self):
         """Resets order fields for new entry and clears the order detail table."""
@@ -814,7 +962,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.productsTable.setCellWidget(rowIndex, 8, deleteButton)  # Delete column
         self.ui.productsTable.setCellWidget(rowIndex, 9, viewButton)  # View column
 
-
     def resetProductForm(self):
         """Resets the product input fields to default values."""
         self.ui.txtProductSKU.clear()
@@ -883,7 +1030,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         # Switch to the selected page
         self.stackedWidget.setCurrentIndex(page_index)
-
 
     def set_buttons_cursor(self):
         """Set the pointer cursor for all buttons in the UI."""

@@ -215,7 +215,7 @@ def getShopkeepers():
         conn = getDbConnection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT ID, Name FROM Shopkeepers WHERE IsDeleted = 0
+            SELECT ID, Name, Brand FROM Shopkeepers WHERE IsDeleted = 0
         """)
         shopkeepers = cursor.fetchall()
         return shopkeepers, None
@@ -223,6 +223,22 @@ def getShopkeepers():
         return None, str(e)
     finally:
         conn.close()
+
+def getProductsByBrand(brand):
+    """Fetch products for the given brand."""
+    try:
+        conn = getDbConnection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT SKU, Name, Size FROM Products WHERE Brand = ? AND IsDeleted = 0
+        """, (brand,))
+        products = cursor.fetchall()
+        return products, None
+    except Exception as e:
+        return None, str(e)
+    finally:
+        conn.close()
+
 
 def getSalesmen():
     """Fetch all active salesmen with their IDs for the combo box."""
