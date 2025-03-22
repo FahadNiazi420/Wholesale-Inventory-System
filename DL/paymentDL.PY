@@ -9,17 +9,20 @@ def getShopkeeperTotalPaidAndDue(shopkeeper_id):
         cursor = conn.cursor()
         cursor.execute("""
             SELECT 
-                COALESCE((SELECT SUM(Amount) FROM Payments WHERE Shopkeeper_ID = ?), 0) AS TotalPaid,
-                COALESCE((SELECT SUM(Total_Due) FROM Khata WHERE Shopkeeper_ID = ?), 0) AS TotalDue
+                COALESCE((SELECT SUM(Amount) FROM Payments WHERE Shopkeeper_ID = ? AND IsDeleted = 0), 0) AS TotalPaid,
+                COALESCE((SELECT Total_Due FROM Khata WHERE Shopkeeper_ID = ?), 0) AS TotalDue
         """, (shopkeeper_id, shopkeeper_id))
+        
         result = cursor.fetchone()
-        total_paid = result[0] if result and result[0] is not None else 0
-        total_due = result[1] if result and result[1] is not None else 0
+        total_paid = result[0] if result else 0
+        total_due = result[1] if result else 0
+        
         return total_paid, total_due, None
     except Exception as e:
         return 0, 0, str(e)  # Default to 0 if any error occurs
     finally:
         conn.close()
+
 
 
 

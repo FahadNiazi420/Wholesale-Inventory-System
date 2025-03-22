@@ -283,7 +283,7 @@ def getProductPrice(sku):
             price, quantity = result
             pricePerItem = price / quantity if quantity > 0 else 0
             # print(pricePerItem)
-            return pricePerItem  # Returning both price and available quantity
+            return price ,quantity # Returning both price and available quantity
         else:
             return None, "Product not found"
     

@@ -526,8 +526,11 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.styleSheet.setObjectName("styleSheet")
+        self.appMargins = QtWidgets.QVBoxLayout(self.styleSheet)
+        self.appMargins.setContentsMargins(0, 0, 0, 0)
+        self.appMargins.setSpacing(0)
+        self.appMargins.setObjectName("appMargins")
         self.bgApp = QtWidgets.QFrame(self.styleSheet)
-        self.bgApp.setGeometry(QtCore.QRect(0, 0, 1319, 984))
         self.bgApp.setStyleSheet("")
         self.bgApp.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.bgApp.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -1600,7 +1603,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 384, 222))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 385, 222))
         self.scrollAreaWidgetContents.setStyleSheet(" QScrollBar:vertical {\n"
 "    border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -2196,6 +2199,7 @@ class Ui_MainWindow(object):
         self.label_43.setObjectName("label_43")
         self.formLayout_8.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_43)
         self.txtPayLastPayment = QtWidgets.QLineEdit(self.frame_21)
+        self.txtPayLastPayment.setEnabled(False)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -2214,6 +2218,7 @@ class Ui_MainWindow(object):
 "padding: 6px 6px")
         self.txtPayLastPayment.setInputMask("")
         self.txtPayLastPayment.setText("")
+        self.txtPayLastPayment.setReadOnly(True)
         self.txtPayLastPayment.setPlaceholderText("")
         self.txtPayLastPayment.setObjectName("txtPayLastPayment")
         self.formLayout_8.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.txtPayLastPayment)
@@ -3518,6 +3523,7 @@ class Ui_MainWindow(object):
 "padding: 6px 6px")
         self.txtTotalDues_6.setText("")
         self.txtTotalDues_6.setReadOnly(True)
+        self.txtTotalDues_6.setClearButtonEnabled(True)
         self.txtTotalDues_6.setObjectName("txtTotalDues_6")
         self.formLayout_12.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.txtTotalDues_6)
         spacerItem27 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -3770,10 +3776,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addWidget(self.bottomBar)
         self.verticalLayout_2.addWidget(self.contentBottom)
         self.appLayout.addWidget(self.contentBox)
+        self.appMargins.addWidget(self.bgApp)
         MainWindow.setCentralWidget(self.styleSheet)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

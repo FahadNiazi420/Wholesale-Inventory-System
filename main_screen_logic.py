@@ -85,6 +85,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.fillOrderComboboxes()
             self.current_order_id=0
             self.ui.cmbxOProduct.currentIndexChanged.connect(self.updateBill)
+            self.ui.cmbxOProduct.currentIndexChanged.connect(self.setMaxQuantity)
             self.ui.numOQuantity.valueChanged.connect(self.updateBill)
             self.ui.numDiscount.valueChanged.connect(self.updateOrderSummaryonDiscount)
 
@@ -136,8 +137,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         orders, _ = paymentDL.getOrdersByShopkeeper(shopkeeper_id)
         if orders:
             for order in orders:
-                display_text = f"{order[1]} (ID: {order[0]})"
-                self.ui.cmbxPayOrder.addItem(display_text, order[0])
+                display_text = f"{order[1]} (ID: {order[0]})"  # Order_Info (ID: Order_ID)
+                self.ui.cmbxPayOrder.addItem(display_text, order[0])  # Display Order_Info, store Order_ID
 
             # Auto-select the first order
             self.ui.cmbxPayOrder.setCurrentIndex(0)
@@ -149,13 +150,10 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         # Load Last Payment Submission Date
         last_submission, _ = paymentDL.getLastSubmissionDate(shopkeeper_id)
-        self.ui.txtPayLastPayment.setText(last_submission if last_submission else "N/A")
+        self.ui.txtPayLastPayment.setText(last_submission)
 
-        # Load Total Paid and Total Due for Shopkeeper with Default Values
+        # Load Total Paid and Total Due for Shopkeeper
         total_paid, total_due, _ = paymentDL.getShopkeeperTotalPaidAndDue(shopkeeper_id)
-        total_paid = total_paid if total_paid is not None else 0  # Ensure it's not None
-        total_due = total_due if total_due is not None else 0  # Ensure it's not None
-
         self.ui.lblSpkPaid.setText(str(int(total_paid)))
         self.ui.lblTotalDue.setText(str(int(total_due)))
 
@@ -198,16 +196,19 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
 
     def updateRemainingAmount(self):
-        """Dynamically update remaining amount without DB calls."""
+        """Dynamically update remaining amount with accurate calculations."""
         try:
-            total_due = int(self.ui.lblTotalDue.text())  # Get total due from label
-            amount_paying = int(self.ui.numPaymentPaid.value())  # Get current input
-            remaining_amount = total_due - amount_paying  # Calculate remaining
+            total_due = int(self.ui.lblTotalDue.text())  # Total amount due
+            total_paid = int(self.ui.lblSpkPaid.text())  # Already paid amount
+            amount_paying = int(self.ui.numPaymentPaid.value())  # New payment
+            
+            # Remaining should be due - (already paid + new payment)
+            remaining_amount = total_due - total_paid - amount_paying
+            
             self.ui.lblRemaining.setText(str(remaining_amount))
-            self.ui.lblAmountPaid.setText(str(amount_paying))  # Update amount being paid
         except ValueError:
-            self.ui.lblRemaining.setText("0")  # Handle conversion errors
-            self.ui.lblAmountPaid.setText("0")
+            self.ui.lblRemaining.setText("0")  # Handle errors
+
 
 
 
@@ -331,19 +332,34 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         # Store current order_item_id for update action
         self.current_order_item_id = order_item_id
 
+    def setMaxQuantity(self):
+        """Sets the maximum quantity for a product based on stock."""
+        sku = self.ui.cmbxOProduct.currentData()
+        _, upperQuantity = orderDL.getProductPrice(sku)
+        # print("upperQuantity:",upperQuantity)
+        # Check if upperQuantity is a valid number
+        try:
+            upperQuantity = int(upperQuantity)
+        except (ValueError, TypeError):
+            upperQuantity = 0  # Default to 0 if invalid
+        
+        # Set maximum quantity based on stock
+        self.ui.numOQuantity.setMaximum(upperQuantity)
+    
     def updateBill(self):
         """Calculates bill amount when quantity changes."""
         sku = self.ui.cmbxOProduct.currentData()
         quantity = self.ui.numOQuantity.value()
 
-        total_price = orderDL.getProductPrice(sku) * quantity
+        price, upperQuantity = orderDL.getProductPrice(sku)
 
-        if sku:
-            price = orderDL.getProductPrice(sku)
-            if price is not None:
-                self.ui.txtOBill.setText(str(total_price))
-            else:
-                self.ui.txtOBill.setText("0")
+        # Handle cases where price or quantity is None
+        if price is None or upperQuantity is None:
+            self.ui.txtOBill.setText("0")
+            return
+
+        total_price = price * quantity
+        self.ui.txtOBill.setText(str(total_price))
 
     def updateOrderSummaryonDiscount(self):
         """Updates the discount and grand total labels based on the discount percentage."""
@@ -504,7 +520,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             discount_percentage = (discount_amount / total_amount) * 100 if total_amount > 0 else 0
 
             # Set values in the UI fields
-            self.ui.cmbxOShopkeeper.setCurrentIndex(self.ui.cmbxOShopkeeper.findText(shopkeeper_name))
+            self.ui.cmbxOShopkeeper.setCurrentIndex(
+            next((i for i in range(self.ui.cmbxOShopkeeper.count()) if self.ui.cmbxOShopkeeper.itemText(i).startswith(shopkeeper_name)), -1))
             self.ui.cmbxOSaleman.setCurrentIndex(self.ui.cmbxOSaleman.findText(salesman_name))
             self.ui.txtOrderInfo.setText(order_info)
             self.ui.numDiscount.setValue(int(discount_percentage))  # Set discount as percentage
