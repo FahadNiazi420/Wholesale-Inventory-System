@@ -143,7 +143,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         except Exception as e:
             QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
 
- 
+  
     def fillPaymentsTable(self):
         """Fetches payment data and fills the paymentsTable widget with Edit, Delete, and View buttons."""
         payments, error = paymentDL.getPayments()
