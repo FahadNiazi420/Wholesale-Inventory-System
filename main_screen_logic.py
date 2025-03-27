@@ -1225,6 +1225,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         msg_box.setWindowTitle(title)
         msg_box.setText(message)
         msg_box.exec_()
+    
     def init_pages(self):
         """Initialize backend logic for each page."""
         # Initialize ConfigSystem logic
@@ -1238,26 +1239,33 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
     def show_config_system(self):
         self.handleMenuClick(self.btnProjects, 0)
+        self.fillProductsTable()
 
     def show_menu_compiler(self):
         self.handleMenuClick(self.btnCriteria,2)
+        self.fillShopkeeperTable()
+    
     def show_game_update_menu(self):
         self.handleMenuClick(self.btnTestList,3)
         self.fillPaymentComboboxes()
         self.fillPaymentsTable()
+    
     def show_pairip_pass_menu(self):
         """Show the Pair IP Pass page."""
         self.handleMenuClick(self.btnSensorList, 4)
         self.fillOrderTable()
         self.fillOrderComboboxes()
+        self.current_order_id=0
 
     def show_offset_leech_menu(self):
         """Show the Offset Leech page."""
         # self.current_page = self.offset_leech
         self.handleMenuClick(self.btnPlanning, 5)
+    
     def show_multi_tool_menu(self):
         """Show the Multi-Tool page."""
         self.handleMenuClick(self.btnReport, 6)    
+    
     def handleMenuClick(self, button, page_index):
         """
         Handles menu button clicks to update styles and switch pages.
