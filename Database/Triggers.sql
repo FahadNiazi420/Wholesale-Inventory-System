@@ -144,3 +144,30 @@ BEGIN
     AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = OLD.Shopkeeper_ID);
 END;
 
+
+CREATE TRIGGER insert_payment_after_order_insert
+AFTER INSERT ON Orders
+FOR EACH ROW
+BEGIN
+    INSERT INTO Payments (Shopkeeper_ID, Order_ID, Salesman_ID, Amount_Paid, Payment_Date, IsDeleted)
+    VALUES (NEW.Shopkeeper_ID, NEW.Order_ID, NEW.Salesman_ID, 0, CURRENT_TIMESTAMP, 0);
+END;
+
+CREATE TRIGGER update_payment_after_order_update
+AFTER UPDATE ON Orders
+FOR EACH ROW
+BEGIN
+    UPDATE Payments
+    SET Shopkeeper_ID = NEW.Shopkeeper_ID,
+        Salesman_ID = NEW.Salesman_ID,
+        IsDeleted = NEW.IsDeleted
+    WHERE Order_ID = NEW.Order_ID;
+END;
+CREATE TRIGGER update_payment_after_order_delete
+AFTER UPDATE OF IsDeleted ON Orders
+FOR EACH ROW
+WHEN NEW.IsDeleted = 1
+BEGIN
+    UPDATE Payments SET IsDeleted = 1 WHERE Order_ID = NEW.Order_ID;
+END;
+

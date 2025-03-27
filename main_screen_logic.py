@@ -191,6 +191,14 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         # Adjust column resizing
         self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(13, QHeaderView.ResizeToContents)
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(14, QHeaderView.ResizeToContents)
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(15, QHeaderView.ResizeToContents)
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(16, QHeaderView.ResizeToContents)
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(8, QHeaderView.ResizeToContents)
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        # self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(13, QHeaderView.ResizeToContents)
 
     def addPaymentTableButtons(self, rowIndex, paymentID, orderID):
         """Adds Edit, Delete, and View buttons to the paymentsTable for a specific payment."""
