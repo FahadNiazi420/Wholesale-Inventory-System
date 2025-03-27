@@ -1,4 +1,4 @@
-
+DROP TRIGGER "main"."create_khata_on_shopkeeper_insert";
 CREATE TRIGGER create_khata_on_shopkeeper_insert
 AFTER INSERT ON Shopkeepers
 FOR EACH ROW
@@ -7,6 +7,44 @@ BEGIN
     VALUES (NEW.ID, NEW.Brand, 0, DATE('now'), 0);
 END;
 
+
+
+
+DROP TRIGGER "main"."restore_product_quantity_on_delete";
+CREATE TRIGGER restore_product_quantity_on_delete
+AFTER UPDATE OF IsDeleted ON Order_Items
+FOR EACH ROW
+WHEN NEW.IsDeleted = 1 AND OLD.IsDeleted = 0
+BEGIN
+    UPDATE Products
+    SET Quantity = Quantity + OLD.Quantity,
+        Last_Updated = CURRENT_TIMESTAMP
+    WHERE SKU = OLD.Product_SKU;
+END;
+
+DROP TRIGGER "main"."reduce_product_quantity_on_insert";
+CREATE TRIGGER reduce_product_quantity_on_insert
+AFTER INSERT ON Order_Items
+FOR EACH ROW
+BEGIN
+    UPDATE Products
+    SET Quantity = Quantity - NEW.Quantity,
+        Last_Updated = CURRENT_TIMESTAMP
+    WHERE SKU = NEW.Product_SKU;
+END;
+
+DROP TRIGGER "main"."update_product_quantity_on_update";
+CREATE TRIGGER update_product_quantity_on_update
+AFTER UPDATE OF Quantity ON Order_Items
+FOR EACH ROW
+BEGIN
+    UPDATE Products
+    SET Quantity = Quantity - (NEW.Quantity - OLD.Quantity),
+        Last_Updated = CURRENT_TIMESTAMP
+    WHERE SKU = NEW.Product_SKU;
+END;
+
+DROP TRIGGER "main"."update_khata_on_payment_insert";
 CREATE TRIGGER update_khata_on_payment_insert
 AFTER INSERT ON Payments
 FOR EACH ROW
@@ -18,6 +56,8 @@ BEGIN
     WHERE Shopkeeper_ID = NEW.Shopkeeper_ID
     AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = NEW.Shopkeeper_ID);
 END;
+
+DROP TRIGGER "main"."update_khata_on_payment_update";
 CREATE TRIGGER update_khata_on_payment_update
 AFTER UPDATE ON Payments
 FOR EACH ROW
@@ -29,6 +69,8 @@ BEGIN
     WHERE Shopkeeper_ID = NEW.Shopkeeper_ID
     AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = NEW.Shopkeeper_ID);
 END;
+
+DROP TRIGGER "main"."update_khata_on_payment_delete";
 CREATE TRIGGER update_khata_on_payment_delete
 AFTER UPDATE OF IsDeleted ON Payments
 FOR EACH ROW
@@ -41,7 +83,7 @@ BEGIN
 END;
 
 
-
+DROP TRIGGER "main"."update_khata_on_order_insert";
 CREATE TRIGGER update_khata_on_order_insert
 AFTER INSERT ON Orders
 FOR EACH ROW
@@ -67,6 +109,7 @@ BEGIN
                                                  AND IsDeleted = 0), 0));
 END;
 
+DROP TRIGGER "main"."update_khata_on_order_update";
 CREATE TRIGGER update_khata_on_order_update
 AFTER UPDATE ON Orders
 FOR EACH ROW
@@ -84,6 +127,8 @@ BEGIN
     WHERE Shopkeeper_ID = NEW.Shopkeeper_ID
     AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = NEW.Shopkeeper_ID);
 END;
+
+DROP TRIGGER "main"."update_khata_on_order_delete";
 CREATE TRIGGER update_khata_on_order_delete
 AFTER UPDATE OF IsDeleted ON Orders
 FOR EACH ROW
@@ -98,3 +143,4 @@ BEGIN
     WHERE Shopkeeper_ID = OLD.Shopkeeper_ID
     AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = OLD.Shopkeeper_ID);
 END;
+

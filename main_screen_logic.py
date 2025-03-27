@@ -16,6 +16,8 @@ from PyQt5.QtWidgets import (
     QHeaderView,
     QTableWidgetItem,
     QWidget,
+    QTextEdit,
+    QDialog,
 )
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt, QDate, QDateTime
@@ -24,6 +26,7 @@ import os
 import sys
 import os
 from datetime import datetime
+import textwrap
 
 from BL import productManager, shopkeeperManager, orderManager 
 from DL import orderDL, paymentDL
@@ -75,7 +78,10 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.btnDashboard.clicked.connect(self.show_dashboard_menu)
 
             # --------------------- PAYMENT / KHATA PAGE BUTTON ---------------------
-            self.fillPaymentComboboxes()
+            
+            # Connect Payment Spinner Change Event for Dynamic Update
+            self.ui.numPaymentPaid.valueChanged.connect(self.updateRemainingAmount)
+            self.ui.btnAddPayment.clicked.connect(self.addPayment)
 
             # --------------------- ORDER PAGE BUTTONS ---------------------
             self.ui.btnCreateOrder.clicked.connect(self.createOrder)
@@ -103,6 +109,217 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.show_message_box("Critical Error", error_message)
 
 # ------------------------------------------------------ PAYMENT / KHATA ------------------------------------------------------
+    def addPayment(self):
+        """Handles the add or edit payment button click event."""
+        try:
+            shopkeeper_id = self.ui.cmbxPaySpk.currentData()
+            order_id = self.ui.cmbxPayOrder.currentData()
+            salesman_id = self.ui.cmbxPaySaleman.currentData()
+            amount_paid = self.ui.numPaymentPaid.value()
+
+            if not shopkeeper_id or not order_id or not salesman_id or amount_paid <= 0:
+                QMessageBox.warning(None, "Input Error", "Please fill all fields correctly before proceeding.")
+                return
+
+            if self.ui.btnAddPayment.text() == "Update Payment":
+                # Handle edit logic
+                success, message = paymentDL.updatePayment(self.current_payment_id, shopkeeper_id, order_id, salesman_id, amount_paid)
+                if success:
+                    QMessageBox.information(None, "Success", "Payment updated successfully!")
+                    self.ui.btnAddPayment.setText("Add Payment")  # Reset button text
+                    self.current_payment_id = None  # Clear current payment ID
+                else:
+                    QMessageBox.warning(None, "Error", message)
+            else:
+                # Handle add logic
+                success, message = paymentDL.addPayment(shopkeeper_id, order_id, salesman_id, amount_paid)
+                if success:
+                    QMessageBox.information(None, "Success", message)
+                else:
+                    QMessageBox.warning(None, "Error", message)
+
+            self.fillPaymentsTable()  # Refresh payments table
+
+        except Exception as e:
+            QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
+ 
+    def fillPaymentsTable(self):
+        """Fetches payment data and fills the paymentsTable widget with Edit, Delete, and View buttons."""
+        payments, error = paymentDL.getPayments()
+        if error:
+            QMessageBox.critical(self, "Error", error)
+            return
+
+        # Clear existing data
+        self.ui.paymentsTable.setRowCount(0)
+
+        # Define column headers (excluding hidden IDs)
+        self.ui.paymentsTable.setColumnCount(16)  # Adjusted for buttons
+        self.ui.paymentsTable.setHorizontalHeaderLabels([
+            "Payment ID", "Shopkeeper ID", "Order ID",  # Hidden columns
+            "Order Info", "Shopkeeper", "Brand", "Total Amount", "Discount", 
+            "Discounted Total", "Amount Paid", "Cumulative Paid", "Remaining Due", "Payment Date",
+            "Edit", "Delete", "View"
+        ])
+
+        # Populate table with fetched data
+        for rowIndex, rowData in enumerate(payments):
+            payment_id, shopkeeper_id, shopkeeper_name, brand, order_id, order_info, total_amount, discount_percentage, discounted_total, amount_paid, cumulative_paid, remaining_due, payment_date = rowData
+
+            self.ui.paymentsTable.insertRow(rowIndex)
+
+            # Fill data columns (including hidden IDs)
+            column_values = [
+                str(payment_id), str(shopkeeper_id), str(order_id),  # Hidden columns
+                order_info, shopkeeper_name, brand, f"{total_amount:.2f}", f"{discount_percentage:.2f}%", 
+                f"{discounted_total:.2f}", f"{amount_paid:.2f}", f"{cumulative_paid:.2f}", f"{remaining_due:.2f}", 
+                str(payment_date)
+            ]
+
+            for colIndex, value in enumerate(column_values):
+                item = QTableWidgetItem(value)
+                self.ui.paymentsTable.setItem(rowIndex, colIndex, item)
+
+            # Add action buttons
+            self.addPaymentTableButtons(rowIndex, payment_id, order_id)
+
+        # Hide backend-use columns (Payment_ID, Shopkeeper_ID, Order_ID)
+        self.ui.paymentsTable.setColumnHidden(0, True)  # Hide Payment_ID
+        self.ui.paymentsTable.setColumnHidden(1, True)  # Hide Shopkeeper_ID
+        self.ui.paymentsTable.setColumnHidden(2, True)  # Hide Order_ID
+
+        # Adjust column resizing
+        self.ui.paymentsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+    def addPaymentTableButtons(self, rowIndex, paymentID, orderID):
+        """Adds Edit, Delete, and View buttons to the paymentsTable for a specific payment."""
+        editButton = QPushButton("Edit")
+        deleteButton = QPushButton("Delete")
+        viewButton = QPushButton("View")
+
+        editButton.clicked.connect(lambda: self.editPayment(paymentID))
+        deleteButton.clicked.connect(lambda: self.deletePayment(paymentID))
+        viewButton.clicked.connect(lambda: self.viewPayment(paymentID))
+
+        # **Ensure buttons appear by placing them in the correct columns**
+        self.ui.paymentsTable.setCellWidget(rowIndex, 13, editButton)  
+        self.ui.paymentsTable.setCellWidget(rowIndex, 14, deleteButton)
+        self.ui.paymentsTable.setCellWidget(rowIndex, 15, viewButton)
+    
+    def deletePayment(self, payment_id):
+        """Handles the delete payment button click event."""
+        confirm = QMessageBox.question(self, "Delete Payment", 
+                                    f"Are you sure you want to delete Payment ID: {payment_id}?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        
+        if confirm == QMessageBox.Yes:
+            success, error = paymentDL.deletePayment(payment_id)
+            if success:
+                QMessageBox.information(self, "Success", "Payment deleted successfully!")
+                self.fillPaymentsTable()
+            else:
+                QMessageBox.critical(self, "Error", error)
+
+    def editPayment(self, payment_id):
+        """Fills the payment form with existing data for editing."""
+        try:
+            payment, error = paymentDL.getPaymentById(payment_id)
+            self.current_payment_id = payment_id
+            if error:
+                QMessageBox.critical(self, "Error", error)
+                return
+            if not payment:
+                QMessageBox.critical(self, "Error", "Payment not found!")
+                return
+
+            shopkeeper_name, order_info, amount_paid, payment_date = payment
+
+            # Set values in the UI fields
+            self.ui.cmbxPaySpk.setCurrentText(shopkeeper_name)
+            # Find the matching order in the combo box based on OrderInfo
+            for i in range(self.ui.cmbxPayOrder.count()):
+                item_text = self.ui.cmbxPayOrder.itemText(i)
+                if item_text.split(" (")[0] == order_info:  # Extract OrderInfo part
+                    self.ui.cmbxPayOrder.setCurrentIndex(i)
+                    break
+            self.ui.numPaymentPaid.setValue(int(amount_paid))
+            self.ui.txtPayLastPayment.setText(payment_date)
+            
+
+            # Update remaining amount
+            self.updateRemainingAmount()
+
+            # Update button text to indicate editing
+            self.ui.btnAddPayment.setText("Update Payment")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Could not load payment details: {str(e)}")
+
+    def viewPayment(self, payment_id):
+        """Displays detailed payment information from the table instead of querying the database."""
+        try:
+            # Find the row that corresponds to the given payment_id
+            row = -1
+            for i in range(self.ui.paymentsTable.rowCount()):
+                if self.ui.paymentsTable.item(i, 0) and self.ui.paymentsTable.item(i, 0).text() == str(payment_id):
+                    row = i
+                    break
+            
+            if row == -1:
+                QMessageBox.warning(self, "Error", "Payment ID not found in the table.")
+                return
+
+            # Fetch values from the table
+            payment_id = self.ui.paymentsTable.item(row, 0).text()  # Payment ID
+            shopkeeper_name = self.ui.paymentsTable.item(row, 4).text()
+            brand = self.ui.paymentsTable.item(row, 5).text()
+            order_info = self.ui.paymentsTable.item(row, 3).text()
+            total_amount = float(self.ui.paymentsTable.item(row, 6).text())
+            discount_percentage = float(self.ui.paymentsTable.item(row, 7).text().replace("%", ""))  # Remove % if present
+            discounted_total = float(self.ui.paymentsTable.item(row, 8).text())
+            amount_paid = float(self.ui.paymentsTable.item(row, 9).text())
+            cumulative_paid = float(self.ui.paymentsTable.item(row, 10).text())
+            remaining_due = float(self.ui.paymentsTable.item(row, 11).text())
+            payment_date = self.ui.paymentsTable.item(row, 12).text()
+
+            # Format data into an HTML table
+            details = textwrap.dedent(f"""
+            <html>
+            <body style="font-size:12pt; margin: auto; align-item:center;">
+                <h2 style="text-align:center;">Payment Details</h2>
+                <table border="0" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+                    <tr><th align="left">Field</th><th align="left">Value</th></tr>
+                    <tr><td><b>Payment ID</b></td><td>{payment_id}</td></tr>
+                    <tr><td><b>Shopkeeper</b></td><td>{shopkeeper_name}</td></tr>
+                    <tr><td><b>Brand</b></td><td>{brand}</td></tr>
+                    <tr><td><b>Order Info</b></td><td>{order_info}</td></tr>
+                    <tr><td><b>Total Amount</b></td><td>{total_amount:.2f}</td></tr>
+                    <tr><td><b>Discount</b></td><td>{discount_percentage:.2f}%</td></tr>
+                    <tr><td><b>Discounted Total</b></td><td>{discounted_total:.2f}</td></tr>
+                    <tr><td><b>Amount Paid</b></td><td>{amount_paid:.2f}</td></tr>
+                    <tr><td><b>Cumulative Paid</b></td><td>{cumulative_paid:.2f}</td></tr>
+                    <tr><td><b>Remaining Due</b></td><td>{remaining_due:.2f}</td></tr>
+                    <tr><td><b>Payment Date</b></td><td>{payment_date}</td></tr>
+                </table>
+            </body>
+            </html>
+            """)
+
+            # Use a dialog instead of QMessageBox to display HTML properly
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Payment Details")
+            layout = QVBoxLayout()
+            text_edit = QTextEdit()
+            text_edit.setReadOnly(True)
+            text_edit.setHtml(details)  # Correctly render HTML
+            layout.addWidget(text_edit)
+            dialog.setLayout(layout)
+            dialog.resize(500, 400)
+            dialog.exec_()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Critical Error", f"An unexpected error occurred: {str(e)}")
+
     def fillPaymentComboboxes(self):
         """Fills shopkeeper combobox and sets up dynamic updates for order and salesman."""
         self.ui.cmbxPaySpk.clear()
@@ -122,7 +339,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         if self.ui.cmbxPaySpk.count() > 0:
             self.ui.cmbxPaySpk.setCurrentIndex(0)
             self.loadOrdersForSelectedShopkeeper()
-
 
     def loadOrdersForSelectedShopkeeper(self):
         """Loads orders for the selected shopkeeper and updates related fields."""
@@ -154,6 +370,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         # Load Total Paid and Total Due for Shopkeeper
         total_paid, total_due, _ = paymentDL.getShopkeeperTotalPaidAndDue(shopkeeper_id)
+        # print(shopkeeper_id,total_paid, total_due)
         self.ui.lblSpkPaid.setText(str(int(total_paid)))
         self.ui.lblTotalDue.setText(str(int(total_due)))
 
@@ -167,10 +384,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         # Call function to fill salesman based on first selected order
         self.loadSalesmanForSelectedOrder()
-
-        # Connect Payment Spinner Change Event for Dynamic Update
-        self.ui.numPaymentPaid.valueChanged.connect(self.updateRemainingAmount)
-
 
     def loadSalesmanForSelectedOrder(self):
         """Loads salesman details for the selected order and updates order total."""
@@ -194,25 +407,24 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         # Call update function to handle remaining amount
         self.updateRemainingAmount()
 
-
     def updateRemainingAmount(self):
         """Dynamically update remaining amount with accurate calculations."""
         try:
             total_due = int(self.ui.lblTotalDue.text())  # Total amount due
             total_paid = int(self.ui.lblSpkPaid.text())  # Already paid amount
             amount_paying = int(self.ui.numPaymentPaid.value())  # New payment
-            
+            self.ui.lblAmountPaid.setText(str(amount_paying))
+
+            orderTotal = int(self.ui.lblOrderPaidbyDue.text())
+            self.ui.lblOrderRemain.setText(str(orderTotal-amount_paying))
             # Remaining should be due - (already paid + new payment)
-            remaining_amount = total_due - total_paid - amount_paying
+            remaining_amount = total_due - amount_paying
+
             
             self.ui.lblRemaining.setText(str(remaining_amount))
         except ValueError:
             self.ui.lblRemaining.setText("0")  # Handle errors
 
-
-
-
-    
 
 # ------------------------------------------------------ ORDER FUNCTIONS ------------------------------------------------------
     def createOrder(self):
@@ -551,8 +763,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         if confirm == QMessageBox.Yes:
             success, error = orderManager.deleteOrder(orderID)
             if success:
-                QMessageBox.information(self, "Success", "Order deleted successfully!")
                 self.fillOrderTable()  # Refresh table after deletion
+                QMessageBox.information(self, "Success", "Order deleted successfully!")
             else:
                 QMessageBox.critical(self, "Error", error)
 
@@ -1020,9 +1232,12 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.handleMenuClick(self.btnCriteria,2)
     def show_game_update_menu(self):
         self.handleMenuClick(self.btnTestList,3)
+        self.fillPaymentComboboxes()
+        self.fillPaymentsTable()
     def show_pairip_pass_menu(self):
         """Show the Pair IP Pass page."""
         self.handleMenuClick(self.btnSensorList, 4)
+        self.fillOrderTable()
         self.fillOrderComboboxes()
 
     def show_offset_leech_menu(self):
