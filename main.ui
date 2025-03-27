@@ -2093,7 +2093,7 @@ background-color:#1159A8;
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>3</number>
+                      <number>6</number>
                      </property>
                      <widget class="QWidget" name="manageProducts">
                       <property name="acceptDrops">
@@ -6942,7 +6942,7 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                     </widget>
                                    </item>
                                    <item row="0" column="1">
-                                    <widget class="QLineEdit" name="txtTotalDues_5">
+                                    <widget class="QLineEdit" name="txtSalesmanName">
                                      <property name="enabled">
                                       <bool>false</bool>
                                      </property>
@@ -6979,7 +6979,7 @@ padding: 6px 6px</string>
                                       <string/>
                                      </property>
                                      <property name="readOnly">
-                                      <bool>true</bool>
+                                      <bool>false</bool>
                                      </property>
                                      <property name="placeholderText">
                                       <string>Saleman Name</string>
@@ -7053,7 +7053,7 @@ padding: 6px 6px</string>
                                     </widget>
                                    </item>
                                    <item row="0" column="1">
-                                    <widget class="QLineEdit" name="txtTotalDues_6">
+                                    <widget class="QLineEdit" name="txtSalesmanContact">
                                      <property name="enabled">
                                       <bool>false</bool>
                                      </property>
@@ -7090,7 +7090,7 @@ padding: 6px 6px</string>
                                       <string/>
                                      </property>
                                      <property name="readOnly">
-                                      <bool>true</bool>
+                                      <bool>false</bool>
                                      </property>
                                      <property name="placeholderText">
                                       <string>0xxxxxxxxxx</string>
@@ -7114,7 +7114,7 @@ padding: 6px 6px</string>
                                     </spacer>
                                    </item>
                                    <item row="2" column="1">
-                                    <widget class="QPushButton" name="btnAddShopkeeper_6">
+                                    <widget class="QPushButton" name="btnAddSalesman">
                                      <property name="styleSheet">
                                       <string notr="true">QPushButton
 {

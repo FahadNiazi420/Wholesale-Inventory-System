@@ -28,8 +28,8 @@ import os
 from datetime import datetime
 import textwrap
 
-from BL import productManager, shopkeeperManager, orderManager 
-from DL import orderDL, paymentDL
+from BL import productManager, shopkeeperManager, orderManager
+from DL import orderDL, paymentDL, salesmanDL
 
 
 
@@ -77,8 +77,11 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             self.btnReportCampaign.clicked.connect(self.show_report_campaign_menu)
             self.btnDashboard.clicked.connect(self.show_dashboard_menu)
 
+            # --------------------- SALESMAN PAGE BUTTON ---------------------
+            self.ui.btnAddSalesman.clicked.connect(self.onAddSalesmanClick)
+            self.fillSalesmanTable()
+
             # --------------------- PAYMENT / KHATA PAGE BUTTON ---------------------
-            
             # Connect Payment Spinner Change Event for Dynamic Update
             self.ui.numPaymentPaid.valueChanged.connect(self.updateRemainingAmount)
             self.ui.btnAddPayment.clicked.connect(self.addPayment)
@@ -108,7 +111,185 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             print(error_message)  # Print to console for debugging
             self.show_message_box("Critical Error", error_message)
 
-# ------------------------------------------------------ PAYMENT / KHATA ------------------------------------------------------
+
+# ------------------------------------------------------ SALESMAN FUNCTIONS ------------------------------------------------------
+    def onAddSalesmanClick(self):
+        """Handles the add/edit salesman button click event."""
+        try:
+            name = self.ui.txtSalesmanName.text().strip()
+            contact = self.ui.txtSalesmanContact.text().strip()
+
+            if not name or not contact:
+                QMessageBox.warning(None, "Input Error", "Please fill all fields correctly before proceeding.")
+                return
+
+            if self.ui.btnAddSalesman.text() == "Edit Salesman":
+                success, message = salesmanDL.updateSalesman(self.editingSalesmanID, name, contact)
+            else:
+                success, message = salesmanDL.addSalesman(name, contact)
+
+            if success:
+                QMessageBox.information(None, "Success", message)
+                self.resetSalesmanForm()
+                self.fillSalesmanTable()  # Refresh table after update
+            else:
+                QMessageBox.warning(None, "Error", message)
+
+            # Reset button text
+            self.ui.btnAddSalesman.setText("Add Salesman")
+            self.editingSalesmanID = None  # Clear tracking variable
+
+        except Exception as e:
+            QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
+
+    def fillSalesmanTable(self):
+        """Fetches salesman data and fills the salesmanTable widget with Edit, Delete, and View buttons."""
+        salesmen, error = salesmanDL.getSalesmen()
+
+        if error:
+            QMessageBox.critical(None, "Error", error)
+            return
+
+        # Clear existing data
+        self.ui.salesmanTable.setRowCount(0)
+
+        # Set column headers
+        self.ui.salesmanTable.setColumnCount(8)  # Adjusted for buttons
+        self.ui.salesmanTable.setHorizontalHeaderLabels([
+            "ID", "Name", "Contact Info", "Total Sales", "Total Collections", "Edit", "Delete", "View"
+        ])
+        self.ui.salesmanTable.setColumnHidden(0, True)  # Hide the ID column
+
+        # Insert data into the table
+        for rowIndex, rowData in enumerate(salesmen):
+            isDeleted = rowData[-1]  # Assuming IsDeleted is the last column
+            if isDeleted in (1, True):  # Skip if marked as deleted
+                continue
+
+            self.ui.salesmanTable.insertRow(rowIndex)
+            for colIndex, value in enumerate(rowData[:-1]):  # Exclude IsDeleted column
+                item = QTableWidgetItem(str(value) if value is not None else "N/A")
+                self.ui.salesmanTable.setItem(rowIndex, colIndex, item)
+
+            # Add buttons for Edit, Delete, and View
+            salesmanID = rowData[0]  # Ensure correct ID is fetched
+            self.addSalesmanTableButtons(rowIndex, salesmanID)
+
+    def onEditSalesman(self, rowIndex):
+        """Handles the edit salesman button click by filling form fields with selected salesman data."""
+        try:
+            salesmanID = self.ui.salesmanTable.item(rowIndex, 0).text()  # Get ID from hidden column
+            name = self.ui.salesmanTable.item(rowIndex, 1).text()
+            contact = self.ui.salesmanTable.item(rowIndex, 2).text()
+
+            if not salesmanID:
+                QMessageBox.warning(None, "Error", "Could not retrieve salesman ID.")
+                return
+
+            self.editingSalesmanID = salesmanID
+            self.ui.txtSalesmanName.setText(name)
+            self.ui.txtSalesmanContact.setText(contact)
+
+            # Change button text and store ID for tracking updates
+            self.ui.btnAddSalesman.setText("Edit Salesman")
+
+        except Exception as e:
+            QMessageBox.critical(None, "Error", f"Could not load salesman details: {str(e)}")
+
+    def onDeleteSalesman(self, salesmanID):
+        """Handles the delete salesman button click."""
+        confirm = QMessageBox.question(None, "Delete Salesman", 
+                                    f"Are you sure you want to delete Salesman ID: {salesmanID}?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        
+        if confirm == QMessageBox.Yes:
+            success, error = salesmanDL.deleteSalesman(salesmanID)
+            if success:
+                QMessageBox.information(None, "Success", "Salesman deleted successfully!")
+                self.fillSalesmanTable()  # Refresh table after deletion
+            else:
+                QMessageBox.critical(None, "Error", error)
+
+    def onViewSalesman(self, salesmanID=None):
+        """Handles the view salesman button click and displays salesman details from the selected row."""
+        try:
+            table = self.ui.salesmanTable
+            rowIndex = table.currentRow()  # Get the selected row index
+
+            if rowIndex < 0:
+                QMessageBox.warning(None, "Warning", "Please select a salesman row to view details.")
+                return
+
+            # Extract data from the selected row
+            salesmanID = table.item(rowIndex, 0).text()  # Get hidden ID column
+            name = table.item(rowIndex, 1).text()
+            contact = table.item(rowIndex, 2).text()
+            total_sales = table.item(rowIndex, 3).text()
+            total_collections = table.item(rowIndex, 4).text()
+
+            # Format the details with spacing and font size
+            details = f"""
+            <html>
+            <body style="font-size:12pt;">
+                <table border="0" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 200%;">
+                    <tr>
+                        <th align="left">Field</th>
+                        <th align="left">Value</th>
+                    </tr>
+                    <tr>
+                        <td><b>ID</b></td>
+                        <td>{salesmanID}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Name</b></td>
+                        <td>{name}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Contact</b></td>
+                        <td>{contact}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Total Sales</b></td>
+                        <td>{total_sales}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Total Collections</b></td>
+                        <td>{total_collections}</td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """
+
+            # Show details in a message box
+            QMessageBox.information(None, "Salesman Details", details)
+
+        except Exception as e:
+            QMessageBox.critical(None, "Error", f"Unexpected error while viewing salesman: {e}")
+
+    def addSalesmanTableButtons(self, rowIndex, salesmanID):
+        """Adds Edit, Delete, and View buttons to the salesmanTable row."""
+        editButton = QPushButton("Edit")
+        deleteButton = QPushButton("Delete")
+        viewButton = QPushButton("View")
+
+        editButton.clicked.connect(lambda: self.onEditSalesman(rowIndex))
+        deleteButton.clicked.connect(lambda: self.onDeleteSalesman(salesmanID))
+        viewButton.clicked.connect(lambda: self.onViewSalesman())
+
+        self.ui.salesmanTable.setCellWidget(rowIndex, 5, editButton)  # Edit column
+        self.ui.salesmanTable.setCellWidget(rowIndex, 6, deleteButton)  # Delete column
+        self.ui.salesmanTable.setCellWidget(rowIndex, 7, viewButton)  # View column
+
+    def resetSalesmanForm(self):
+        """Resets the salesman input fields to default values."""
+        self.ui.txtSalesmanName.clear()
+        self.ui.txtSalesmanContact.clear()
+
+        self.ui.btnAddSalesman.setText("Add Salesman")
+        self.editingSalesmanID = None
+
+# ------------------------------------------------------ PAYMENT / KHATA FUNCTIONS ------------------------------------------------------
     def addPayment(self):
         """Handles the add or edit payment button click event."""
         try:
@@ -143,7 +324,6 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         except Exception as e:
             QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
 
-  
     def fillPaymentsTable(self):
         """Fetches payment data and fills the paymentsTable widget with Edit, Delete, and View buttons."""
         payments, error = paymentDL.getPayments()
@@ -774,10 +954,10 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         if confirm == QMessageBox.Yes:
             success, error = orderManager.deleteOrder(orderID)
             if success:
-                self.fillOrderTable()  # Refresh table after deletion
                 QMessageBox.information(self, "Success", "Order deleted successfully!")
             else:
                 QMessageBox.critical(self, "Error", error)
+            self.fillOrderTable()  # Refresh table after deletion
 
     def fillOrderComboboxes(self):
         """Fills shopkeeper, salesman, and product combo boxes with IDs and names."""
@@ -1001,6 +1181,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         except Exception as e:
             QMessageBox.critical(None, "Error", f"Unexpected error while viewing shopkeeper: {e}")
+    
     def addShopkeeperTableButtons(self, rowIndex, shopkeeperID):
         """Adds Edit, Delete, and View buttons to the shopkeeperTable row."""
         editButton = QPushButton("Edit")
