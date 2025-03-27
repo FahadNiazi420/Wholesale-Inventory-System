@@ -1,182 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:\Wholesale-Inventory-System\Database\inventory.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="6683"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,5:mainKhata"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Delivery_Expenses" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="113"/><column index="2" value="90"/><column index="3" value="78"/><column index="4" value="132"/><column index="5" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Khata" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="144"/><column index="3" value="83"/><column index="4" value="138"/><column index="5" value="183"/><column index="6" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Order_Items" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="142"/><column index="2" value="90"/><column index="3" value="124"/><column index="4" value="84"/><column index="5" value="147"/><column index="6" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Orders" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="90"/><column index="2" value="144"/><column index="3" value="124"/><column index="4" value="162"/><column index="5" value="147"/><column index="6" value="93"/><column index="7" value="106"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Payments" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="117"/><column index="2" value="144"/><column index="3" value="90"/><column index="4" value="124"/><column index="5" value="126"/><column index="6" value="136"/><column index="7" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Salesmen" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="112"/><column index="3" value="124"/><column index="4" value="109"/><column index="5" value="158"/><column index="6" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Shopkeepers" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="167"/><column index="3" value="124"/><column index="4" value="93"/><column index="5" value="83"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">-- Disable foreign key constraints to avoid errors during deletion
-PRAGMA foreign_keys = OFF;
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:\Wholesale-Inventory-System\Database\inventory.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="6683"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,5:mainKhata"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Delivery_Expenses" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="113"/><column index="2" value="90"/><column index="3" value="78"/><column index="4" value="132"/><column index="5" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Khata" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="144"/><column index="3" value="83"/><column index="4" value="111"/><column index="5" value="183"/><column index="6" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Orders" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="90"/><column index="2" value="144"/><column index="3" value="124"/><column index="4" value="162"/><column index="5" value="132"/><column index="6" value="93"/><column index="7" value="106"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Payments" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="117"/><column index="2" value="144"/><column index="3" value="90"/><column index="4" value="124"/><column index="5" value="126"/><column index="6" value="162"/><column index="7" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Products" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="93"/><column index="2" value="80"/><column index="3" value="83"/><column index="4" value="52"/><column index="5" value="84"/><column index="6" value="57"/><column index="7" value="162"/><column index="8" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Salesmen" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="112"/><column index="3" value="124"/><column index="4" value="109"/><column index="5" value="158"/><column index="6" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Shopkeepers" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="167"/><column index="3" value="124"/><column index="4" value="93"/><column index="5" value="83"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">WITH PaymentsOrdered AS (
+                SELECT 
+                    P.Payment_ID,
+                    P.Shopkeeper_ID,
+                    S.Name AS Shopkeeper_Name,
+                    K.Brand,
+                    P.Order_ID,
+                    O.Total_Amount,
+                    O.Order_Info,  -- Added Order_Info
+                    COALESCE(D.Discount_Amount, 0) AS Discount_Percentage,
+                    (O.Total_Amount * (1 - COALESCE(D.Discount_Amount, 0) / 100)) AS Initial_Discounted_Total,
+                    P.Amount_Paid,
+                    P.Payment_Date
+                FROM Payments P
+                JOIN Shopkeepers S ON P.Shopkeeper_ID = S.ID
+                JOIN Orders O ON P.Order_ID = O.Order_ID
+                LEFT JOIN Discounts D ON P.Order_ID = D.Order_ID AND D.IsDeleted = 0
+                LEFT JOIN Khata K ON P.Shopkeeper_ID = K.Shopkeeper_ID
+                WHERE P.IsDeleted = 0
+                ORDER BY P.Shopkeeper_ID, P.Order_ID, P.Payment_Date
+            ),
+            CumulativePayments AS (
+                SELECT 
+                    Payment_ID,
+                    Shopkeeper_ID,
+                    Shopkeeper_Name,
+                    Brand,
+                    Order_ID,
+                    Order_Info,  -- Included Order_Info
+                    Total_Amount,
+                    Discount_Percentage,
+                    Initial_Discounted_Total AS Discounted_Total,
+                    Amount_Paid,
+                    Amount_Paid AS Cumulative_Paid,
+                    (Initial_Discounted_Total - Amount_Paid) AS Remaining_Due,
+                    Payment_Date
+                FROM PaymentsOrdered
+                WHERE Payment_ID = (SELECT MIN(Payment_ID) FROM PaymentsOrdered PO WHERE PO.Shopkeeper_ID = PaymentsOrdered.Shopkeeper_ID AND PO.Order_ID = PaymentsOrdered.Order_ID)
 
--- Delete all rows from each table
-DELETE FROM Payments;
-DELETE FROM Orders;
-DELETE FROM Order_Items;
-DELETE FROM Discounts;
-DELETE FROM Khata;
+                UNION ALL
 
--- Optionally, reset autoincrement counters (if using SQLite)
-DELETE FROM sqlite_sequence;
-
--- Re-enable foreign key constraints
-PRAGMA foreign_keys = ON;
-
--- Optionally, run VACUUM to reclaim disk space
-VACUUM;
-
-INSERT INTO Khata (Shopkeeper_ID, Brand, Total_Due, Last_Payment_Date) VALUES
-(16, 'Bonapapa', 0, NULL),
-(17, 'Bonapapa', 0, NULL),
-(18, 'Candyland', 0, NULL),
-(19, 'Candyland', 0, NULL);
-</sql><sql name="Triggers.sql">DROP TRIGGER &quot;main&quot;.&quot;create_khata_on_shopkeeper_insert&quot;;
-CREATE TRIGGER create_khata_on_shopkeeper_insert
-AFTER INSERT ON Shopkeepers
-FOR EACH ROW
-BEGIN
-    INSERT INTO Khata (Shopkeeper_ID, Brand, Total_Due, Last_Payment_Date, IsDeleted)
-    VALUES (NEW.ID, NEW.Brand, 0, DATE('now'), 0);
-END;
-
-
-
-
-DROP TRIGGER &quot;main&quot;.&quot;restore_product_quantity_on_delete&quot;;
-CREATE TRIGGER restore_product_quantity_on_delete
-AFTER UPDATE OF IsDeleted ON Order_Items
-FOR EACH ROW
-WHEN NEW.IsDeleted = 1 AND OLD.IsDeleted = 0
-BEGIN
-    UPDATE Products
-    SET Quantity = Quantity + OLD.Quantity,
-        Last_Updated = CURRENT_TIMESTAMP
-    WHERE SKU = OLD.Product_SKU;
-END;
-
-DROP TRIGGER &quot;main&quot;.&quot;reduce_product_quantity_on_insert&quot;;
-CREATE TRIGGER reduce_product_quantity_on_insert
-AFTER INSERT ON Order_Items
-FOR EACH ROW
-BEGIN
-    UPDATE Products
-    SET Quantity = Quantity - NEW.Quantity,
-        Last_Updated = CURRENT_TIMESTAMP
-    WHERE SKU = NEW.Product_SKU;
-END;
-
-DROP TRIGGER &quot;main&quot;.&quot;update_product_quantity_on_update&quot;;
-CREATE TRIGGER update_product_quantity_on_update
-AFTER UPDATE OF Quantity ON Order_Items
-FOR EACH ROW
-BEGIN
-    UPDATE Products
-    SET Quantity = Quantity - (NEW.Quantity - OLD.Quantity),
-        Last_Updated = CURRENT_TIMESTAMP
-    WHERE SKU = NEW.Product_SKU;
-END;
-
-DROP TRIGGER &quot;main&quot;.&quot;update_khata_on_payment_insert&quot;;
-CREATE TRIGGER update_khata_on_payment_insert
-AFTER INSERT ON Payments
-FOR EACH ROW
-BEGIN
-    -- Update the total due by subtracting the payment amount
-    UPDATE Khata
-    SET Total_Due = Total_Due - NEW.Amount_Paid,
-        Last_Payment_Date = NEW.Payment_Date
-    WHERE Shopkeeper_ID = NEW.Shopkeeper_ID
-    AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = NEW.Shopkeeper_ID);
-END;
-
-DROP TRIGGER &quot;main&quot;.&quot;update_khata_on_payment_update&quot;;
-CREATE TRIGGER update_khata_on_payment_update
-AFTER UPDATE ON Payments
-FOR EACH ROW
-BEGIN
-    -- Add back old payment amount before subtracting new payment amount
-    UPDATE Khata
-    SET Total_Due = Total_Due + OLD.Amount_Paid - NEW.Amount_Paid,
-        Last_Payment_Date = NEW.Payment_Date
-    WHERE Shopkeeper_ID = NEW.Shopkeeper_ID
-    AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = NEW.Shopkeeper_ID);
-END;
-
-DROP TRIGGER &quot;main&quot;.&quot;update_khata_on_payment_delete&quot;;
-CREATE TRIGGER update_khata_on_payment_delete
-AFTER UPDATE OF IsDeleted ON Payments
-FOR EACH ROW
-WHEN NEW.IsDeleted = 1 AND OLD.IsDeleted = 0  -- Only trigger when marking as deleted
-BEGIN
-    UPDATE Khata
-    SET Total_Due = Total_Due + OLD.Amount_Paid
-    WHERE Shopkeeper_ID = OLD.Shopkeeper_ID
-    AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = OLD.Shopkeeper_ID);
-END;
-
-
-DROP TRIGGER &quot;main&quot;.&quot;update_khata_on_order_insert&quot;;
-CREATE TRIGGER update_khata_on_order_insert
-AFTER INSERT ON Orders
-FOR EACH ROW
-BEGIN
-    -- Insert or update `Khata` with discounted amount
-    INSERT INTO Khata (Shopkeeper_ID, Brand, Total_Due, Last_Payment_Date, IsDeleted)
-    VALUES (
-        NEW.Shopkeeper_ID,
-        (SELECT Brand FROM Shopkeepers WHERE ID = NEW.Shopkeeper_ID),
-        NEW.Total_Amount - COALESCE((SELECT SUM(Discount_Amount) 
-                                     FROM Discounts 
-                                     WHERE Order_ID = NEW.Order_ID 
-                                     AND IsDeleted = 0), 0),
-        NULL,
-        0
-    )
-    ON CONFLICT(Shopkeeper_ID, Brand) 
-    DO UPDATE SET 
-        Total_Due = Khata.Total_Due + 
-                    (NEW.Total_Amount - COALESCE((SELECT SUM(Discount_Amount) 
-                                                 FROM Discounts 
-                                                 WHERE Order_ID = NEW.Order_ID 
-                                                 AND IsDeleted = 0), 0));
-END;
-
-DROP TRIGGER &quot;main&quot;.&quot;update_khata_on_order_update&quot;;
-CREATE TRIGGER update_khata_on_order_update
-AFTER UPDATE ON Orders
-FOR EACH ROW
-BEGIN
-    UPDATE Khata
-    SET Total_Due = Total_Due 
-        - (OLD.Total_Amount - COALESCE((SELECT SUM(Discount_Amount) 
-                                        FROM Discounts 
-                                        WHERE Order_ID = OLD.Order_ID 
-                                        AND IsDeleted = 0), 0))
-        + (NEW.Total_Amount - COALESCE((SELECT SUM(Discount_Amount) 
-                                        FROM Discounts 
-                                        WHERE Order_ID = NEW.Order_ID 
-                                        AND IsDeleted = 0), 0))
-    WHERE Shopkeeper_ID = NEW.Shopkeeper_ID
-    AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = NEW.Shopkeeper_ID);
-END;
-
-DROP TRIGGER &quot;main&quot;.&quot;update_khata_on_order_delete&quot;;
-CREATE TRIGGER update_khata_on_order_delete
-AFTER UPDATE OF IsDeleted ON Orders
-FOR EACH ROW
-WHEN NEW.IsDeleted = 1 AND OLD.IsDeleted = 0
-BEGIN
-    UPDATE Khata
-    SET Total_Due = Total_Due - 
-        (OLD.Total_Amount - COALESCE((SELECT SUM(Discount_Amount) 
-                                      FROM Discounts 
-                                      WHERE Order_ID = OLD.Order_ID 
-                                      AND IsDeleted = 0), 0))
-    WHERE Shopkeeper_ID = OLD.Shopkeeper_ID
-    AND Brand = (SELECT Brand FROM Shopkeepers WHERE ID = OLD.Shopkeeper_ID);
-END;
-
-</sql><sql name="payment_khata.sql">WITH PaymentsOrdered AS (
+                SELECT 
+                    P.Payment_ID,
+                    P.Shopkeeper_ID,
+                    P.Shopkeeper_Name,
+                    P.Brand,
+                    P.Order_ID,
+                    P.Order_Info,  -- Included Order_Info
+                    P.Total_Amount,
+                    P.Discount_Percentage,
+                    CP.Remaining_Due AS Discounted_Total,
+                    P.Amount_Paid,
+                    CP.Cumulative_Paid + P.Amount_Paid AS Cumulative_Paid,
+                    (CP.Remaining_Due - P.Amount_Paid) AS Remaining_Due,
+                    P.Payment_Date
+                FROM PaymentsOrdered P
+                JOIN CumulativePayments CP 
+                ON P.Shopkeeper_ID = CP.Shopkeeper_ID AND P.Order_ID = CP.Order_ID
+                WHERE P.Payment_ID &gt; CP.Payment_ID
+            )
+            SELECT * FROM CumulativePayments ORDER BY Shopkeeper_ID, Order_ID, Payment_Date;</sql><sql name="payment_khata.sql">WITH PaymentsOrdered AS (
     SELECT 
         P.Payment_ID,
         P.Shopkeeper_ID,
         S.Name AS Shopkeeper_Name,
         K.Brand,
+        K.Total_Due AS Khata_Value, -- Added Khata value
         P.Order_ID,
         O.Total_Amount,
-        O.Order_Info,  -- Added Order_Info
+        O.Order_Info,
         COALESCE(D.Discount_Amount, 0) AS Discount_Percentage,
         (O.Total_Amount * (1 - COALESCE(D.Discount_Amount, 0) / 100)) AS Initial_Discounted_Total,
         P.Amount_Paid,
@@ -185,48 +76,68 @@ END;
     JOIN Shopkeepers S ON P.Shopkeeper_ID = S.ID
     JOIN Orders O ON P.Order_ID = O.Order_ID
     LEFT JOIN Discounts D ON P.Order_ID = D.Order_ID AND D.IsDeleted = 0
-    LEFT JOIN Khata K ON P.Shopkeeper_ID = K.Shopkeeper_ID
+    LEFT JOIN Khata K ON P.Shopkeeper_ID = K.Shopkeeper_ID -- Get Khata amount from Khata table
     WHERE P.IsDeleted = 0
-    ORDER BY P.Shopkeeper_ID, P.Order_ID, P.Payment_Date
 ),
 CumulativePayments AS (
-    SELECT 
-        Payment_ID,
-        Shopkeeper_ID,
-        Shopkeeper_Name,
-        Brand,
-        Order_ID,
-        Order_Info,  -- Included Order_Info
-        Total_Amount,
-        Discount_Percentage,
-        Initial_Discounted_Total AS Discounted_Total,
-        Amount_Paid,
-        Amount_Paid AS Cumulative_Paid,
-        (Initial_Discounted_Total - Amount_Paid) AS Remaining_Due,
-        Payment_Date
-    FROM PaymentsOrdered
-    WHERE Payment_ID = (SELECT MIN(Payment_ID) FROM PaymentsOrdered PO WHERE PO.Shopkeeper_ID = PaymentsOrdered.Shopkeeper_ID AND PO.Order_ID = PaymentsOrdered.Order_ID)
-
-    UNION ALL
-
     SELECT 
         P.Payment_ID,
         P.Shopkeeper_ID,
         P.Shopkeeper_Name,
         P.Brand,
+        P.Khata_Value, -- Included Khata value
         P.Order_ID,
-        P.Order_Info,  -- Included Order_Info
+        P.Order_Info,
         P.Total_Amount,
         P.Discount_Percentage,
-        CP.Remaining_Due AS Discounted_Total,
+        P.Initial_Discounted_Total AS Discounted_Total,
         P.Amount_Paid,
-        CP.Cumulative_Paid + P.Amount_Paid AS Cumulative_Paid,
-        (CP.Remaining_Due - P.Amount_Paid) AS Remaining_Due,
+        SUM(P.Amount_Paid) OVER (PARTITION BY P.Shopkeeper_ID, P.Order_ID ORDER BY P.Payment_Date) AS Cumulative_Paid,
+        (P.Initial_Discounted_Total - 
+         SUM(P.Amount_Paid) OVER (PARTITION BY P.Shopkeeper_ID, P.Order_ID ORDER BY P.Payment_Date)) AS Remaining_Due,
         P.Payment_Date
     FROM PaymentsOrdered P
-    JOIN CumulativePayments CP 
-    ON P.Shopkeeper_ID = CP.Shopkeeper_ID AND P.Order_ID = CP.Order_ID
-    WHERE P.Payment_ID &gt; CP.Payment_ID
 )
-SELECT * FROM CumulativePayments ORDER BY Payment_Date;
-</sql><current_tab id="0"/></tab_sql></sqlb_project>
+SELECT * FROM CumulativePayments ORDER BY Shopkeeper_ID, Order_ID, Payment_Date;
+</sql><sql name="SQL 3">WITH PaymentsOrdered AS (
+    SELECT 
+        COALESCE(P.Payment_ID, 0) AS Payment_ID, -- Handle missing payments
+        O.Shopkeeper_ID,
+        S.Name AS Shopkeeper_Name,
+        K.Brand,
+        K.Total_Due AS Khata_Value, 
+        O.Order_ID,
+        O.Total_Amount,
+        O.Order_Info,
+        COALESCE(D.Discount_Amount, 0) AS Discount_Percentage,
+        (O.Total_Amount * (1 - COALESCE(D.Discount_Amount, 0) / 100)) AS Initial_Discounted_Total,
+        COALESCE(P.Amount_Paid, 0) AS Amount_Paid, -- Set unpaid orders to 0
+        COALESCE(P.Payment_Date, O.Order_Date) AS Payment_Date -- Default to order date if no payment
+    FROM Orders O
+    LEFT JOIN Payments P ON O.Order_ID = P.Order_ID -- Include orders without payments
+    JOIN Shopkeepers S ON O.Shopkeeper_ID = S.ID
+    LEFT JOIN Discounts D ON O.Order_ID = D.Order_ID AND D.IsDeleted = 0
+    LEFT JOIN Khata K ON O.Shopkeeper_ID = K.Shopkeeper_ID
+    WHERE O.IsDeleted = 0
+),
+CumulativePayments AS (
+    SELECT 
+        P.Payment_ID,
+        P.Shopkeeper_ID,
+        P.Shopkeeper_Name,
+        P.Brand,
+        P.Khata_Value, 
+        P.Order_ID,
+        P.Order_Info,
+        P.Total_Amount,
+        P.Discount_Percentage,
+        P.Initial_Discounted_Total AS Discounted_Total,
+        P.Amount_Paid,
+        SUM(P.Amount_Paid) OVER (PARTITION BY P.Shopkeeper_ID, P.Order_ID ORDER BY P.Payment_Date) AS Cumulative_Paid,
+        (P.Initial_Discounted_Total - 
+         SUM(P.Amount_Paid) OVER (PARTITION BY P.Shopkeeper_ID, P.Order_ID ORDER BY P.Payment_Date)) AS Remaining_Due,
+        P.Payment_Date
+    FROM PaymentsOrdered P
+)
+SELECT * FROM CumulativePayments ORDER BY Shopkeeper_ID, Order_ID, Payment_Date;
+</sql><current_tab id="1"/></tab_sql></sqlb_project>

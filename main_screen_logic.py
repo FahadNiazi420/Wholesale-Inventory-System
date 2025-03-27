@@ -137,11 +137,12 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
                     QMessageBox.information(None, "Success", message)
                 else:
                     QMessageBox.warning(None, "Error", message)
-
+            self.loadOrdersForSelectedShopkeeper()
             self.fillPaymentsTable()  # Refresh payments table
 
         except Exception as e:
             QMessageBox.critical(None, "Critical Error", f"An unexpected error occurred: {str(e)}")
+
  
     def fillPaymentsTable(self):
         """Fetches payment data and fills the paymentsTable widget with Edit, Delete, and View buttons."""
@@ -154,24 +155,24 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         self.ui.paymentsTable.setRowCount(0)
 
         # Define column headers (excluding hidden IDs)
-        self.ui.paymentsTable.setColumnCount(16)  # Adjusted for buttons
+        self.ui.paymentsTable.setColumnCount(17)  # Adjusted for buttons
         self.ui.paymentsTable.setHorizontalHeaderLabels([
             "Payment ID", "Shopkeeper ID", "Order ID",  # Hidden columns
-            "Order Info", "Shopkeeper", "Brand", "Total Amount", "Discount", 
+            "Order Info", "Shopkeeper", "Brand", "Khata", "Order Total", "Discount", 
             "Discounted Total", "Amount Paid", "Cumulative Paid", "Remaining Due", "Payment Date",
             "Edit", "Delete", "View"
         ])
 
         # Populate table with fetched data
         for rowIndex, rowData in enumerate(payments):
-            payment_id, shopkeeper_id, shopkeeper_name, brand, order_id, order_info, total_amount, discount_percentage, discounted_total, amount_paid, cumulative_paid, remaining_due, payment_date = rowData
+            payment_id, shopkeeper_id, shopkeeper_name, brand, khata_value, order_id, order_info, total_amount, discount_percentage, discounted_total, amount_paid, cumulative_paid, remaining_due, payment_date = rowData
 
             self.ui.paymentsTable.insertRow(rowIndex)
 
             # Fill data columns (including hidden IDs)
             column_values = [
                 str(payment_id), str(shopkeeper_id), str(order_id),  # Hidden columns
-                order_info, shopkeeper_name, brand, f"{total_amount:.2f}", f"{discount_percentage:.2f}%", 
+                order_info, shopkeeper_name, brand,f"{khata_value:.2f}", f"{total_amount:.2f}", f"{discount_percentage:.2f}%", 
                 f"{discounted_total:.2f}", f"{amount_paid:.2f}", f"{cumulative_paid:.2f}", f"{remaining_due:.2f}", 
                 str(payment_date)
             ]
@@ -202,9 +203,9 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         viewButton.clicked.connect(lambda: self.viewPayment(paymentID))
 
         # **Ensure buttons appear by placing them in the correct columns**
-        self.ui.paymentsTable.setCellWidget(rowIndex, 13, editButton)  
-        self.ui.paymentsTable.setCellWidget(rowIndex, 14, deleteButton)
-        self.ui.paymentsTable.setCellWidget(rowIndex, 15, viewButton)
+        self.ui.paymentsTable.setCellWidget(rowIndex, 14, editButton)  
+        self.ui.paymentsTable.setCellWidget(rowIndex, 15, deleteButton)
+        self.ui.paymentsTable.setCellWidget(rowIndex, 16, viewButton)
     
     def deletePayment(self, payment_id):
         """Handles the delete payment button click event."""
@@ -274,13 +275,14 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             shopkeeper_name = self.ui.paymentsTable.item(row, 4).text()
             brand = self.ui.paymentsTable.item(row, 5).text()
             order_info = self.ui.paymentsTable.item(row, 3).text()
-            total_amount = float(self.ui.paymentsTable.item(row, 6).text())
-            discount_percentage = float(self.ui.paymentsTable.item(row, 7).text().replace("%", ""))  # Remove % if present
-            discounted_total = float(self.ui.paymentsTable.item(row, 8).text())
-            amount_paid = float(self.ui.paymentsTable.item(row, 9).text())
-            cumulative_paid = float(self.ui.paymentsTable.item(row, 10).text())
-            remaining_due = float(self.ui.paymentsTable.item(row, 11).text())
-            payment_date = self.ui.paymentsTable.item(row, 12).text()
+            khata = float(self.ui.paymentsTable.item(row, 6).text())
+            total_amount = float(self.ui.paymentsTable.item(row, 7).text())
+            discount_percentage = float(self.ui.paymentsTable.item(row, 8).text().replace("%", ""))  # Remove % if present
+            discounted_total = float(self.ui.paymentsTable.item(row, 9).text())
+            amount_paid = float(self.ui.paymentsTable.item(row, 10).text())
+            cumulative_paid = float(self.ui.paymentsTable.item(row, 11).text())
+            remaining_due = float(self.ui.paymentsTable.item(row, 12).text())
+            payment_date = self.ui.paymentsTable.item(row, 13).text()
 
             # Format data into an HTML table
             details = textwrap.dedent(f"""
@@ -293,7 +295,8 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
                     <tr><td><b>Shopkeeper</b></td><td>{shopkeeper_name}</td></tr>
                     <tr><td><b>Brand</b></td><td>{brand}</td></tr>
                     <tr><td><b>Order Info</b></td><td>{order_info}</td></tr>
-                    <tr><td><b>Total Amount</b></td><td>{total_amount:.2f}</td></tr>
+                    <tr><td><b>Khata</b></td><td>{khata:.2f}</td></tr>
+                    <tr><td><b>Order Total</b></td><td>{total_amount:.2f}</td></tr>
                     <tr><td><b>Discount</b></td><td>{discount_percentage:.2f}%</td></tr>
                     <tr><td><b>Discounted Total</b></td><td>{discounted_total:.2f}</td></tr>
                     <tr><td><b>Amount Paid</b></td><td>{amount_paid:.2f}</td></tr>
@@ -314,7 +317,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
             text_edit.setHtml(details)  # Correctly render HTML
             layout.addWidget(text_edit)
             dialog.setLayout(layout)
-            dialog.resize(500, 400)
+            dialog.resize(600, 500)
             dialog.exec_()
 
         except Exception as e:

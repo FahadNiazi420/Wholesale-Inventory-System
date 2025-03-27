@@ -2991,7 +2991,7 @@ color: rgb(255, 255, 255);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>385</width>
+                                 <width>222</width>
                                  <height>222</height>
                                 </rect>
                                </property>
@@ -4902,22 +4902,22 @@ color: rgb(255, 255, 255);</string>
                                   </row>
                                   <column>
                                    <property name="text">
+                                    <string>Payid</string>
+                                   </property>
+                                  </column>
+                                  <column>
+                                   <property name="text">
+                                    <string>Spkid</string>
+                                   </property>
+                                  </column>
+                                  <column>
+                                   <property name="text">
+                                    <string>orderid</string>
+                                   </property>
+                                  </column>
+                                  <column>
+                                   <property name="text">
                                     <string>Shopkeeper</string>
-                                   </property>
-                                  </column>
-                                  <column>
-                                   <property name="text">
-                                    <string>New Column</string>
-                                   </property>
-                                  </column>
-                                  <column>
-                                   <property name="text">
-                                    <string>New Column</string>
-                                   </property>
-                                  </column>
-                                  <column>
-                                   <property name="text">
-                                    <string>New Column</string>
                                    </property>
                                   </column>
                                   <column>
@@ -4927,12 +4927,22 @@ color: rgb(255, 255, 255);</string>
                                   </column>
                                   <column>
                                    <property name="text">
+                                    <string>Khata</string>
+                                   </property>
+                                  </column>
+                                  <column>
+                                   <property name="text">
+                                    <string>Total</string>
+                                   </property>
+                                  </column>
+                                  <column>
+                                   <property name="text">
                                     <string>Due</string>
                                    </property>
                                   </column>
                                   <column>
                                    <property name="text">
-                                    <string>Paid</string>
+                                    <string>New Column</string>
                                    </property>
                                   </column>
                                   <column>
@@ -4942,27 +4952,22 @@ color: rgb(255, 255, 255);</string>
                                   </column>
                                   <column>
                                    <property name="text">
-                                    <string>Last Payment</string>
+                                    <string>Paid</string>
                                    </property>
                                   </column>
                                   <column>
                                    <property name="text">
-                                    <string>New Column</string>
+                                    <string>Discountper</string>
                                    </property>
                                   </column>
                                   <column>
                                    <property name="text">
-                                    <string>New Column</string>
+                                    <string>Cumulative</string>
                                    </property>
                                   </column>
                                   <column>
                                    <property name="text">
-                                    <string>Order Date</string>
-                                   </property>
-                                  </column>
-                                  <column>
-                                   <property name="text">
-                                    <string>Salesman</string>
+                                    <string>Disprice</string>
                                    </property>
                                   </column>
                                   <column>
