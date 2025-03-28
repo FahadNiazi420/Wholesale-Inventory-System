@@ -6943,11 +6943,8 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                    </item>
                                    <item row="0" column="1">
                                     <widget class="QLineEdit" name="txtSalesmanName">
-                                     <property name="enabled">
-                                      <bool>false</bool>
-                                     </property>
                                      <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                                        <horstretch>0</horstretch>
                                        <verstretch>0</verstretch>
                                       </sizepolicy>
@@ -6978,11 +6975,8 @@ padding: 6px 6px</string>
                                      <property name="text">
                                       <string/>
                                      </property>
-                                     <property name="readOnly">
-                                      <bool>false</bool>
-                                     </property>
                                      <property name="placeholderText">
-                                      <string>Saleman Name</string>
+                                      <string>Salesman Name</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -7052,13 +7046,47 @@ padding: 6px 6px</string>
                                      </property>
                                     </widget>
                                    </item>
+                                   <item row="2" column="1">
+                                    <spacer name="verticalSpacer_9">
+                                     <property name="orientation">
+                                      <enum>Qt::Vertical</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>20</width>
+                                       <height>40</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item row="3" column="1">
+                                    <widget class="QPushButton" name="btnAddSalesman">
+                                     <property name="styleSheet">
+                                      <string notr="true">QPushButton
+{
+background-color:#345CBF;
+color:white;
+border-radius:3px;
+font: 12pt &quot;Calibri&quot;;
+font-weight:bold;
+color:white;
+padding:5px;
+
+}
+QPushButton:hover
+{
+background-color:#1159A8;
+}</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>Add Saleman</string>
+                                     </property>
+                                    </widget>
+                                   </item>
                                    <item row="0" column="1">
                                     <widget class="QLineEdit" name="txtSalesmanContact">
-                                     <property name="enabled">
-                                      <bool>false</bool>
-                                     </property>
                                      <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
                                        <verstretch>0</verstretch>
                                       </sizepolicy>
@@ -7084,56 +7112,13 @@ color: rgb(255, 255, 255);
 padding: 6px 6px</string>
                                      </property>
                                      <property name="inputMask">
-                                      <string>0000000000;_</string>
+                                      <string>00000000000;_</string>
                                      </property>
                                      <property name="text">
                                       <string/>
                                      </property>
-                                     <property name="readOnly">
-                                      <bool>false</bool>
-                                     </property>
                                      <property name="placeholderText">
                                       <string>0xxxxxxxxxx</string>
-                                     </property>
-                                     <property name="clearButtonEnabled">
-                                      <bool>true</bool>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="1" column="1">
-                                    <spacer name="verticalSpacer_9">
-                                     <property name="orientation">
-                                      <enum>Qt::Vertical</enum>
-                                     </property>
-                                     <property name="sizeHint" stdset="0">
-                                      <size>
-                                       <width>20</width>
-                                       <height>40</height>
-                                      </size>
-                                     </property>
-                                    </spacer>
-                                   </item>
-                                   <item row="2" column="1">
-                                    <widget class="QPushButton" name="btnAddSalesman">
-                                     <property name="styleSheet">
-                                      <string notr="true">QPushButton
-{
-background-color:#345CBF;
-color:white;
-border-radius:3px;
-font: 12pt &quot;Calibri&quot;;
-font-weight:bold;
-color:white;
-padding:5px;
-
-}
-QPushButton:hover
-{
-background-color:#1159A8;
-}</string>
-                                     </property>
-                                     <property name="text">
-                                      <string>Add Saleman</string>
                                      </property>
                                     </widget>
                                    </item>

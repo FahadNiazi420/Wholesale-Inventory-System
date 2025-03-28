@@ -144,7 +144,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
     def fillSalesmanTable(self):
         """Fetches salesman data and fills the salesmanTable widget with Edit, Delete, and View buttons."""
-        salesmen, error = salesmanDL.getSalesmen()
+        salesmen, error = salesmanDL.getSalesmen()        
 
         if error:
             QMessageBox.critical(None, "Error", error)
