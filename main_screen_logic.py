@@ -1029,6 +1029,11 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
         # Reset order state
         self.current_order_id = None
         self.ui.btnCreateOrder.setText("Create Order")
+        self.ui.btnCreateOrder.setEnabled(True)
+        self.ui.cmbxOProduct.setEnabled(False)
+        self.ui.numOQuantity.setEnabled(False)
+        self.ui.btnAddItem.setEnabled(False)
+        self.ui.btnFinishOrder.setEnabled(False)
 
 
 # ------------------------------------------------------ SHOPKEEPER FUNCTION ------------------------------------------------------
@@ -1462,6 +1467,7 @@ class MasterScreen(QMainWindow, Ui_MainWindow):
 
         # Switch to the selected page
         self.stackedWidget.setCurrentIndex(page_index)
+        self.fillSalesmanTable()
 
     def set_buttons_cursor(self):
         """Set the pointer cursor for all buttons in the UI."""

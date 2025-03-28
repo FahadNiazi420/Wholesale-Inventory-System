@@ -2093,7 +2093,7 @@ background-color:#1159A8;
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>6</number>
+                      <number>5</number>
                      </property>
                      <widget class="QWidget" name="manageProducts">
                       <property name="acceptDrops">
@@ -6219,7 +6219,7 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                   </property>
                                   <layout class="QFormLayout" name="formLayout_9">
                                    <item row="0" column="0">
-                                    <widget class="QLabel" name="label_45">
+                                    <widget class="QLabel" name="label_48">
                                      <property name="font">
                                       <font>
                                        <family>Calibri</family>
@@ -6229,16 +6229,13 @@ font: 75 14pt &quot;Calibri&quot;;</string>
                                        <bold>false</bold>
                                       </font>
                                      </property>
-                                     <property name="styleSheet">
-                                      <string notr="true"/>
-                                     </property>
                                      <property name="text">
-                                      <string>Order : </string>
+                                      <string>Shopkeeper : </string>
                                      </property>
                                     </widget>
                                    </item>
                                    <item row="0" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand_8">
+                                    <widget class="QComboBox" name="cmbxReturnSpk">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
@@ -6304,7 +6301,7 @@ color: rgb(255, 255, 255);</string>
                                     </widget>
                                    </item>
                                    <item row="1" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand_11">
+                                    <widget class="QComboBox" name="cmbxReturnsSalesmen">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
@@ -6353,52 +6350,7 @@ color: rgb(255, 255, 255);</string>
                                      </item>
                                     </widget>
                                    </item>
-                                   <item row="2" column="1">
-                                    <widget class="QLineEdit" name="txtTotalDues_3">
-                                     <property name="enabled">
-                                      <bool>false</bool>
-                                     </property>
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>0</width>
-                                       <height>28</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>12</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);
-padding: 6px 6px</string>
-                                     </property>
-                                     <property name="inputMask">
-                                      <string>00000000000000000000</string>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="readOnly">
-                                      <bool>true</bool>
-                                     </property>
-                                     <property name="placeholderText">
-                                      <string>Quantity Returned</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="2" column="0">
+                                   <item row="3" column="0">
                                     <widget class="QLabel" name="label_47">
                                      <property name="font">
                                       <font>
@@ -6415,7 +6367,75 @@ padding: 6px 6px</string>
                                     </widget>
                                    </item>
                                    <item row="3" column="1">
-                                    <widget class="QTextEdit" name="textEdit_2">
+                                    <widget class="QFrame" name="frame_45">
+                                     <property name="frameShape">
+                                      <enum>QFrame::StyledPanel</enum>
+                                     </property>
+                                     <property name="frameShadow">
+                                      <enum>QFrame::Raised</enum>
+                                     </property>
+                                     <layout class="QHBoxLayout" name="horizontalLayout_27">
+                                      <property name="leftMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="topMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="rightMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="bottomMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <item>
+                                       <widget class="QSpinBox" name="numReturnedQuantity">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                        </property>
+                                        <property name="minimumSize">
+                                         <size>
+                                          <width>0</width>
+                                          <height>36</height>
+                                         </size>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);
+font: 11pt &quot;MS Shell Dlg 2&quot;;</string>
+                                        </property>
+                                        <property name="maximum">
+                                         <number>999999999</number>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QLabel" name="lblOrderDue_4">
+                                        <property name="styleSheet">
+                                         <string notr="true">font: 15pt &quot;MS Shell Dlg 2&quot;;</string>
+                                        </property>
+                                        <property name="text">
+                                         <string>/</string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QLabel" name="lblReturnProductTotal">
+                                        <property name="styleSheet">
+                                         <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+                                        </property>
+                                        <property name="text">
+                                         <string>0</string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                     </layout>
+                                    </widget>
+                                   </item>
+                                   <item row="4" column="1">
+                                    <widget class="QTextEdit" name="txtReturnReason">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                                        <horstretch>0</horstretch>
@@ -6435,7 +6455,7 @@ padding: 6px 6px</string>
                                      </property>
                                     </widget>
                                    </item>
-                                   <item row="3" column="0">
+                                   <item row="4" column="0">
                                     <widget class="QLabel" name="label_60">
                                      <property name="font">
                                       <font>
@@ -6475,72 +6495,6 @@ padding: 6px 6px</string>
                                    <enum>QFrame::Raised</enum>
                                   </property>
                                   <layout class="QFormLayout" name="formLayout_10">
-                                   <item row="0" column="0">
-                                    <widget class="QLabel" name="label_48">
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>Shopkeeper : </string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item row="0" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand_10">
-                                     <property name="sizePolicy">
-                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                       <horstretch>0</horstretch>
-                                       <verstretch>0</verstretch>
-                                      </sizepolicy>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Calibri</family>
-                                       <pointsize>11</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="autoFillBackground">
-                                      <bool>false</bool>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(33, 37, 43);
-color: rgb(255, 255, 255);</string>
-                                     </property>
-                                     <property name="iconSize">
-                                      <size>
-                                       <width>16</width>
-                                       <height>16</height>
-                                      </size>
-                                     </property>
-                                     <property name="frame">
-                                      <bool>true</bool>
-                                     </property>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 1</string>
-                                      </property>
-                                     </item>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 2</string>
-                                      </property>
-                                     </item>
-                                     <item>
-                                      <property name="text">
-                                       <string>Test 3</string>
-                                      </property>
-                                     </item>
-                                    </widget>
-                                   </item>
                                    <item row="1" column="0">
                                     <widget class="QLabel" name="label_46">
                                      <property name="font">
@@ -6558,7 +6512,7 @@ color: rgb(255, 255, 255);</string>
                                     </widget>
                                    </item>
                                    <item row="1" column="1">
-                                    <widget class="QComboBox" name="cmbxSpkBrand_9">
+                                    <widget class="QComboBox" name="cmbxReturnsProducts">
                                      <property name="sizePolicy">
                                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                                        <horstretch>0</horstretch>
@@ -6608,7 +6562,7 @@ color: rgb(255, 255, 255);</string>
                                     </widget>
                                    </item>
                                    <item row="5" column="1">
-                                    <widget class="QPushButton" name="btnAddShopkeeper_3">
+                                    <widget class="QPushButton" name="btnAddReturns">
                                      <property name="styleSheet">
                                       <string notr="true">QPushButton
 {
@@ -6645,7 +6599,7 @@ background-color:#1159A8;
                                     </spacer>
                                    </item>
                                    <item row="2" column="1">
-                                    <widget class="QDateTimeEdit" name="dateTimeEdit">
+                                    <widget class="QDateTimeEdit" name="cmbxReturnsLastPayment">
                                      <property name="minimumSize">
                                       <size>
                                        <width>0</width>
@@ -6672,6 +6626,75 @@ font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
                                      </property>
                                      <property name="text">
                                       <string>Last Payment : </string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item row="0" column="1">
+                                    <widget class="QComboBox" name="cmbxReturnsOrder">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
+                                     <property name="font">
+                                      <font>
+                                       <family>Calibri</family>
+                                       <pointsize>11</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="autoFillBackground">
+                                      <bool>false</bool>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">background-color: rgb(33, 37, 43);
+color: rgb(255, 255, 255);</string>
+                                     </property>
+                                     <property name="iconSize">
+                                      <size>
+                                       <width>16</width>
+                                       <height>16</height>
+                                      </size>
+                                     </property>
+                                     <property name="frame">
+                                      <bool>true</bool>
+                                     </property>
+                                     <item>
+                                      <property name="text">
+                                       <string>Test 1</string>
+                                      </property>
+                                     </item>
+                                     <item>
+                                      <property name="text">
+                                       <string>Test 2</string>
+                                      </property>
+                                     </item>
+                                     <item>
+                                      <property name="text">
+                                       <string>Test 3</string>
+                                      </property>
+                                     </item>
+                                    </widget>
+                                   </item>
+                                   <item row="0" column="0">
+                                    <widget class="QLabel" name="label_45">
+                                     <property name="font">
+                                      <font>
+                                       <family>Calibri</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true"/>
+                                     </property>
+                                     <property name="text">
+                                      <string>Order : </string>
                                      </property>
                                     </widget>
                                    </item>

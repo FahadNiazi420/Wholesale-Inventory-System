@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:\Wholesale-Inventory-System\Database\inventory.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="6683"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainReturns"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Delivery_Expenses" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="113"/><column index="2" value="90"/><column index="3" value="78"/><column index="4" value="132"/><column index="5" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Returns" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="100"/><column index="2" value="90"/><column index="3" value="124"/><column index="4" value="174"/><column index="5" value="119"/><column index="6" value="73"/><column index="7" value="93"/><column index="8" value="126"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="Triggers2.sql">-- Update_Total_Sales_After_Order	Updates Total_Sales when a new order is added
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:\Wholesale-Inventory-System\Database\inventory.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="6683"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,6:mainOrders"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Delivery_Expenses" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="113"/><column index="2" value="90"/><column index="3" value="78"/><column index="4" value="132"/><column index="5" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Orders" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="90"/><column index="2" value="144"/><column index="3" value="124"/><column index="4" value="162"/><column index="5" value="132"/><column index="6" value="93"/><column index="7" value="106"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Payments" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="117"/><column index="2" value="144"/><column index="3" value="90"/><column index="4" value="124"/><column index="5" value="126"/><column index="6" value="162"/><column index="7" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Returns" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="100"/><column index="2" value="90"/><column index="3" value="124"/><column index="4" value="174"/><column index="5" value="119"/><column index="6" value="73"/><column index="7" value="93"/><column index="8" value="126"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Salesmen" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="112"/><column index="3" value="124"/><column index="4" value="111"/><column index="5" value="158"/><column index="6" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="Triggers2.sql">-- Update_Total_Sales_After_Order	Updates Total_Sales when a new order is added
 -- Update_Total_Sales_After_Discount	Updates Total_Sales when a discount is applied/updated
 -- Update_Total_Collections_After_Payment	Updates Total_Collections when a payment is made
 -- Update_Total_Collections_After_Return	Adjusts Total_Collections when a return is recorded
@@ -19,6 +19,29 @@ BEGIN
     )
     WHERE ID = NEW.Salesman_ID;
 END;
+
+CREATE TRIGGER Update_Total_Sales_On_Order_Update
+AFTER UPDATE ON Orders
+FOR EACH ROW
+WHEN NEW.IsDeleted = 0
+BEGIN
+    -- Subtract old total sales
+    UPDATE Salesmen
+    SET Total_Sales = Total_Sales - (
+        (OLD.Total_Amount * (1 - COALESCE((SELECT Discount_Amount FROM Discounts 
+                                          WHERE Order_ID = OLD.Order_ID AND IsDeleted = 0), 0) / 100))
+    )
+    WHERE ID = OLD.Salesman_ID;
+
+    -- Add new total sales
+    UPDATE Salesmen
+    SET Total_Sales = Total_Sales + (
+        (NEW.Total_Amount * (1 - COALESCE((SELECT Discount_Amount FROM Discounts 
+                                          WHERE Order_ID = NEW.Order_ID AND IsDeleted = 0), 0) / 100))
+    )
+    WHERE ID = NEW.Salesman_ID;
+END;
+
 
 -- Trigger 2: Update Total_Sales When Discount Is Inserted
 CREATE TRIGGER Update_Total_Sales_After_Discount_Insert
@@ -115,4 +138,35 @@ BEGIN
     )
     WHERE ID = OLD.Salesman_ID;
 END;
-</sql><current_tab id="0"/></tab_sql></sqlb_project>
+</sql><sql name="SQL 2">SELECT 
+    S.ID AS Salesman_ID,
+    S.Name AS Salesman_Name,
+    S.Contact_Info,
+    S.Total_Sales ,
+    S.Total_Collections ,
+    
+    -- Calculated Sales (After Applying Discounts)
+    COALESCE((
+        SELECT SUM(O.Total_Amount * (1 - COALESCE(D.Discount_Amount, 0) / 100))
+        FROM Orders O
+        LEFT JOIN Discounts D ON O.Order_ID = D.Order_ID AND D.IsDeleted = 0
+        WHERE O.Salesman_ID = S.ID AND O.IsDeleted = 0
+    ), 0) AS Calculated_Total_Sales,
+
+    -- Calculated Collections (Payments - Returns)
+    COALESCE((
+        SELECT SUM(P.Amount_Paid)
+        FROM Payments P
+        WHERE P.Salesman_ID = S.ID AND P.IsDeleted = 0
+    ), 0) - 
+    COALESCE((
+        SELECT SUM(R.Return_Value)
+        FROM Returns R
+        JOIN Orders O ON R.Order_ID = O.Order_ID
+        WHERE O.Salesman_ID = S.ID AND R.IsDeleted = 0
+    ), 0) AS Calculated_Total_Collections
+
+FROM Salesmen S
+WHERE S.IsDeleted = 0
+ORDER BY S.ID;
+</sql><current_tab id="1"/></tab_sql></sqlb_project>
